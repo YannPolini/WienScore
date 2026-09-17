@@ -1,0 +1,20 @@
+# Build output
+**/target/
+
+# Local IDE files
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+.factorypath
+.apt_generated/
+
+# Local configuration and logs
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
