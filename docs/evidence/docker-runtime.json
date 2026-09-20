@@ -1,0 +1,13 @@
+{
+  "restartPreservedSnapshots": true,
+  "states": [
+    "CACHED",
+    "CACHED",
+    "CACHED",
+    "CACHED",
+    "CACHED"
+  ],
+  "image": "sha256:23aad2c4b5bf45843dfd1db8ab44d0180b2d78da244aa28bfde6a8bfc23cca02",
+  "sizeBytes": "312876031",
+  "runtimeUser": "10001"
+}

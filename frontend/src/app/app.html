@@ -1,6 +1,85 @@
 <main>
+  <p class="eyebrow">Vienna · Student profile · Working prototype</p>
   <h1>WienScore</h1>
-  <p>Quality-of-life scores for Vienna addresses, tailored to students and seniors.</p>
-  <p class="notice">The application is under development.</p>
-  <router-outlet />
+  <p>How close are everyday amenities? Enter an address to see a draft grade and the places behind it.</p>
+  <form (ngSubmit)="search()">
+    <label for="address">Vienna street and house number</label>
+    <p id="address-help">Use the exact street spelling. You can add a postcode and Wien.</p>
+    <div class="input-row">
+      <input id="address" name="address" [(ngModel)]="address" (ngModelChange)="clearResult()" maxlength="160"
+        placeholder="Hoher Markt 1, 1010 Wien" aria-describedby="address-help" [disabled]="busy()" />
+      <button type="submit" [disabled]="busy()">{{ busy() ? 'Calculating…' : 'Calculate grade' }}</button>
+    </div>
+  </form>
+  <p class="notice">Student profile · Provisional weights and thresholds. This is an amenity-access estimate, not an official rating or a complete measure of quality of life.</p>
+  @if (busy()) { <p role="status">Resolving your address and checking Vienna open data. The first calculation can take up to 90 seconds.</p> }
+  @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+  @if (result(); as result) {
+    <section aria-live="polite">
+      <h2>{{ result.grade !== null ? 'Your draft result' : 'No grade available' }}</h2>
+      <p>{{ result.message }}</p>
+      @if (result.location; as location) {
+        <h3>Resolved location</h3>
+        <p><strong>{{ location.label }}</strong><br />{{ location.latitude }}, {{ location.longitude }} (latitude, longitude)</p>
+        <p class="small">Address source: Stadt Wien, ADRESSENOGD. Retrieved {{ result.addressRetrievedAt | date:'medium':'UTC' }} UTC.</p>
+      }
+      @if (result.grade !== null) {
+        <div class="summary">
+          <div class="grade" aria-label="Grade">{{ result.grade }}<span>of 5 · 1 is best</span></div>
+          <div><strong>{{ result.score | number:'1.2-2' }} / 100</strong><br />{{ result.profile }} · {{ result.modelVersion }}</div>
+        </div>
+      }
+      @if (result.candidates.length) {
+        <h3>Possible matches</h3>
+        <ul>@for (match of result.candidates; track $index) { <li>{{ match.label }} ({{ match.latitude }}, {{ match.longitude }})</li> }</ul>
+        <p>Clarify the address above and calculate again.</p>
+      }
+    </section>
+    @if (result.factors.length) {
+      <section>
+        <h2>What contributes to this result?</h2>
+        <p>Distances are straight-line estimates to mapped points, not walking routes. Each factor falls linearly from 100 at zero distance to 0 at its distance limit.</p>
+        <div class="factors">
+          @for (factor of result.factors; track factor.category) {
+            <article>
+              <h3>{{ factor.category }}</h3>
+              <p><strong>{{ factor.distanceMetres | number:'1.0-0' }} m</strong> · {{ factor.nearestName }}</p>
+              <dl>
+                <div><dt>Factor score</dt><dd>{{ factor.score | number:'1.2-2' }} / 100</dd></div>
+                <div><dt>Weight</dt><dd>{{ factor.weight * 100 | number:'1.0-0' }}%</dd></div>
+                <div><dt>Contribution</dt><dd>{{ factor.contribution | number:'1.2-2' }} points</dd></div>
+                <div><dt>Distance limit</dt><dd>{{ factor.distanceLimitMetres }} m</dd></div>
+              </dl>
+            </article>
+          }
+        </div>
+        <p class="small">The weighted contributions add up to the overall score. Grade cutoffs: 80 → 1, 60 → 2, 40 → 3, 20 → 4, below 20 → 5. Grades use unrounded values; displayed numbers are rounded.</p>
+      </section>
+    }
+    @if (result.sources.length) {
+      <section>
+        <h2>Data and limitations</h2>
+        <p>Snapshot times show when data were retrieved, not when each place was last updated. By default, cached data are refreshed after 24 hours; a failed refresh may use a validated snapshot up to 7 days old.</p>
+        @for (source of result.sources; track source.layer) {
+          <details [open]="source.state === 'UNAVAILABLE' || source.state === 'STALE_FALLBACK'">
+            <summary>{{ source.category }} · {{ source.state === 'UNAVAILABLE' ? 'Unavailable' : source.state === 'STALE_FALLBACK' ? 'Older snapshot fallback' : 'Snapshot available' }}</summary>
+            <p>{{ source.message }}</p>
+            @if (source.retrievedAt) {
+              <p>{{ source.featureCount }} records · Retrieved {{ source.retrievedAt | date:'medium':'UTC' }} UTC.</p>
+            }
+            @if (source.unnamedFeatures) {
+              <p>{{ source.unnamedFeatures }} records have no name; their coordinates are retained and their source IDs identify them.</p>
+            }
+            <p>{{ source.limitation }}</p>
+            <p><a [href]="source.url" target="_blank" rel="noopener">{{ source.layer }} source data</a> · {{ source.license }}</p>
+            @if (source.sha256) { <p class="small hash">Snapshot SHA-256: {{ source.sha256 }}</p> }
+          </details>
+        }
+      </section>
+    }
+  }
+  <footer>
+    <p>Datenquelle: Stadt Wien – <a href="https://data.wien.gv.at">data.wien.gv.at</a>.<br />
+      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="https://digitales.wien.gv.at/ogd-nutzungsbedingungen/">Data terms and attribution</a> · WienScore calculates distances and a provisional student score from these data.</p>
+  </footer>
 </main>

@@ -1,5 +1,6 @@
 # Build output
 **/target/
+**/data-cache/
 
 # Local IDE files
 .idea/

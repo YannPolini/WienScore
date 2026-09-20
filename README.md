@@ -1,46 +1,72 @@
 # WienScore
 
-Quality-of-life scores for Vienna addresses, tailored to students and seniors.
+A Vienna address-to-grade prototype for the Innovation Lab 2 individual retake,
+project **LQ_Web**. The first milestone uses a fixed **student** profile and real
+Vienna open data: parks, Wiener Linien stops, pharmacies and municipal libraries.
 
-Innovation Lab 2 individual project: **LQ_Web**.
+Try **Hoher Markt 1, 1010 Wien**. The app shows the resolved location, a grade from
+1 (best) to 5, nearest places/distances, contributions and source snapshots.
+The weights and thresholds are provisional assumptions, not validated research
+or an official quality-of-life rating. Senior selection and broader address
+support remain Sprint 2 work.
 
-## Current setup
+## Quick start with Docker
 
-- `backend/`: Java 21 / Spring Boot 4.1.1, Spring Web, Actuator and Maven Wrapper.
-- `frontend/`: Angular 22, TypeScript, SCSS, routing and an HTTP client.
+Prerequisites: Docker Engine/Desktop running **Linux containers**, Docker Compose,
+a free local port **8081**, and internet access. No API keys, database, local JDK,
+Node installation or pre-downloaded datasets are needed for Docker startup.
+The build downloads public images and Maven/npm dependencies. Runtime needs HTTPS
+access to `data.wien.gv.at`; every address lookup is live. A source outage with no
+usable cached snapshot produces a visible unavailable result, not a grade.
 
-The frontend displays a minimal starting page. The backend currently provides a
-health endpoint. Address lookup, scoring, Docker packaging and production serving
-of Angular will be added during development.
+From the repository root:
 
-## Requirements
+```powershell
+docker compose up --build -d
+```
 
-- JDK 21 (`java -version` should report version 21).
-- Node.js 24.15 or newer within the 24.x line, with npm (verified with Node 24.19).
-- Internet access to install dependencies and download Maven on the first build.
+Open **http://localhost:8081** and calculate `Hoher Markt 1, 1010 Wien`.
+Startup normally takes a few seconds after the image is built. The first
+calculation loads five layers and can take up to about 90 seconds on timeouts.
+Check `http://localhost:8081/actuator/health` for `{"status":"UP"}`. Health means
+that the app started; it does not guarantee the external datasets are available.
 
-Maven Wrapper downloads the pinned Maven version automatically; a separate Maven
-installation is not required. If Java cannot be found, set `JAVA_HOME` to your JDK
-installation directory.
+```powershell
+docker compose logs --tail=100
+docker compose down
+```
 
-## Run the backend
+The named `dataset-cache` volume preserves validated data across container
+restarts. `down` preserves it too. The Docker image serves built Angular and
+Spring Boot from a single Java process, running as a non-root user. The port is
+bound to the local machine only. Stop a locally running backend before starting
+Docker on 8081.
 
-From the repository root in PowerShell:
+The Docker build runs the backend and frontend tests. `.dockerignore` excludes
+host dependencies, build output and cached data; neither a host `node_modules`
+nor a previously built JAR is needed. To check the running workflow from PowerShell:
+
+```powershell
+./scripts/smoke-test.ps1
+```
+
+This is a runnable development baseline. The final exported Docker artifact,
+clean-machine handover, archive-size check and submission package remain pending.
+
+## Local development
+
+Requirements: Java **21**, Node **24.15+ within 24.x**, npm, internet for the first
+build. Verified here with Java 21.0.11 and Node 24.18.0. Maven Wrapper pins Maven;
+a separate Maven install is unnecessary. Set `JAVA_HOME` if Java cannot be found.
+
+Backend, from the repository root:
 
 ```powershell
 cd backend
 .\mvnw.cmd spring-boot:run
 ```
 
-Check `http://localhost:8081/actuator/health` — its JSON should include `"status":"UP"`.
-The backend root URL `/` currently returns 404; open Angular on port 4201 instead.
-Press Ctrl+C to stop.
-
-On Linux/macOS, use `sh ./mvnw` in place of `.\mvnw.cmd`.
-
-## Run the frontend
-
-Keep Spring Boot running and open a second terminal at the repository root:
+Frontend, in a second terminal from the repository root:
 
 ```powershell
 cd frontend
@@ -48,18 +74,19 @@ npm ci
 npm start
 ```
 
-Open `http://localhost:4201`. You only need `npm ci` after cloning or when the
-lockfile changes. Angular CLI is installed locally; no global installation is needed.
+Open **http://localhost:4201**. Angular's development proxy forwards `/api/**` and
+`/actuator/health` to `127.0.0.1:8081`. Use relative API URLs. Plain backend
+startup does not build/serve Angular; its root `/` returns 404. Docker includes
+Angular, so the Docker root `/` serves the app. Press Ctrl+C to stop local servers.
+On Linux/macOS replace `.\mvnw.cmd` with `sh ./mvnw`.
 
-During development, `src/proxy.conf.json` forwards `/api/**` and
-`/actuator/health` to Spring Boot at `127.0.0.1:8081`. Check
-`http://localhost:4201/actuator/health` to verify the connection. Future HTTP client
-calls should use relative paths such as `/api/...`; application API routes are
-not implemented yet. This development proxy does not configure production hosting.
+## Checks
 
-WienScore uses ports 4201 and 8081 to avoid conflicting with LifeDash on 4200/8080.
+From `backend/`:
 
-## Frontend checks
+```powershell
+.\mvnw.cmd -B -ntp clean verify
+```
 
 From `frontend/`:
 
@@ -68,20 +95,66 @@ npm test -- --watch=false
 npm run build
 ```
 
-The production files are generated in `frontend/dist/wienscore/browser/`.
+The backend suite includes calculation boundaries, the documented student-weight
+example, geometry, exact address queries, ambiguity, missing/invalid data, timeout
+fallback, cache expiry/corruption and an HTTP integration flow against a local WFS
+fixture. Angular checks the form, loading/errors, result details, stale-result
+clearing, ambiguity and fallback display. Automated tests do not need live Vienna
+data. The smoke script and browser acceptance checks do.
 
-## Test and package
+Backend JAR: `backend/target/wienscore-0.0.1-SNAPSHOT.jar`.
+Frontend build: `frontend/dist/wienscore/browser/`.
+See [acceptance evidence](docs/ACCEPTANCE.md) for actual results and limits.
 
-From `backend/`:
+## Data, calculation and API
 
-```powershell
-.\mvnw.cmd clean verify
-java -jar target/wienscore-0.0.1-SNAPSHOT.jar
-```
+- [Source manifest, model and limitations](docs/SOURCES_AND_MODEL.md)
+- [Captured per-dataset license/update metadata](docs/source-metadata.json)
+- [API contract and screen behavior](docs/API.md)
+- [Implementation/verification record](docs/ACCEPTANCE.md)
 
-`verify` runs the application-context smoke test and creates the executable JAR.
-The test verifies startup wiring; feature acceptance tests will be added during
-implementation.
+Model rules live in `ScoringModel.java`: distance limits 1000/800/1000/2000 m,
+student weights 25/40/10/25%, linear distance scores and grade cutoffs
+80/60/40/20. Change the model version when changing the rules. No weights are
+silently renormalized. Grades require all four categories and a verified location
+inside Vienna's district polygons. Missing names are disclosed; missing or invalid
+coordinates invalidate a snapshot.
 
-Open `backend/pom.xml` as a Maven project in your Java IDE. Source code starts in
-`backend/src/main/java/dev/polini/wienscore/`.
+Address lookup is deliberately exact: street and house number, optionally postcode
+and Wien. No fuzzy matching or autocomplete is implemented. No-match, ambiguity,
+invalid input, out-of-boundary coordinates and unusable data give explicit outcomes.
+The UI never silently picks an ambiguous result or keeps a result for edited input.
+
+Datenquelle: Stadt Wien – https://data.wien.gv.at. Selected data: **CC BY 4.0**.
+WienScore derives distances and scores from the source data. See the source manifest
+for per-layer attribution, coverage, limitations and metadata evidence.
+
+## Cache and configuration
+
+Five mandatory layers are cached in memory and as validated JSON envelopes in
+`backend/data-cache/` for local backend runs, or `/app/data-cache` in Docker.
+Address lookups are not persisted. Each response identifies the used snapshot by
+retrieval time and SHA-256. Keep the response and snapshot files together if you
+need to reproduce that exact dataset state later; the cache is not an archive.
+
+Spring properties can be overridden with environment variables:
+
+| Environment variable | Default | Meaning |
+|---|---|---|
+| `WIENSCORE_CACHE_DIRECTORY` | `./data-cache` | Writable snapshot directory; Docker sets `/app/data-cache`. |
+| `WIENSCORE_CACHE_REFRESH` | `PT24H` | Refresh a layer after 24 hours, on the next calculation. |
+| `WIENSCORE_CACHE_MAX_AGE` | `P7D` | Withhold data once 7 days old if refresh fails. Must be ≥ refresh interval. |
+| `WIENSCORE_CACHE_RETRY` | `PT5M` | Retry interval after a failed refresh. |
+| `WIENSCORE_REQUEST_TIMEOUT` | `PT15S` | Timeout per source request (connect timeout: 5 s). |
+| `WIENSCORE_WFS_URL` | `https://data.wien.gv.at/daten/geo` | Integration-test override; production attribution assumes the official source. |
+
+Durations use ISO-8601. No refresh interval guarantees feature freshness. Bad or
+incomplete responses never replace a validated snapshot. A failed refresh can use
+a dated fallback within the maximum age, with that fact visible in the result.
+A fresh installation still needs internet and a functioning address/data source.
+
+No accounts, database, map or air-quality scoring are included. The project uses
+Java 21 / Spring Boot 4.1.1 and Angular 22. JTS 1.20.0 provides boundary geometry
+operations (EPL 2.0 / EDL 1.0). Repository technical documentation stays here;
+academic diary/work records stay in the university NAS folder. No remote push is
+part of the implementation workflow unless explicitly requested.

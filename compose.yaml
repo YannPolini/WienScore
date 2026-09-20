@@ -1,0 +1,12 @@
+services:
+  wienscore:
+    build: .
+    image: wienscore:local
+    ports:
+      - "127.0.0.1:8081:8081"
+    volumes:
+      - dataset-cache:/app/data-cache
+    restart: unless-stopped
+
+volumes:
+  dataset-cache:

@@ -1,5 +1,5 @@
 main {
-  max-width: 48rem;
+  max-width: 64rem;
   margin: 0 auto;
   padding: 4rem 1.5rem;
 }
@@ -12,4 +12,37 @@ h1 {
 
 .notice {
   color: #52616b;
+}
+
+label { display: block; font-weight: 650; }
+form, section { margin-top: 2rem; padding: 1.5rem; background: white; border: 1px solid #d7e1df; border-radius: 1rem; }
+.eyebrow { color: #365f55; font-size: .9rem; }
+.input-row { display: flex; gap: .75rem; }
+input, button { font: inherit; border-radius: .5rem; padding: .75rem 1rem; }
+input { flex: 1; min-width: 0; border: 1px solid #687e79; }
+button { background: #205647; color: white; border: 0; cursor: pointer; }
+button:disabled { opacity: .65; cursor: wait; }
+:focus-visible { outline: 3px solid #b45e13; outline-offset: 3px; }
+.error { color: #8c2222; }
+.summary { display: flex; align-items: center; gap: 2rem; background: #edf5ef; padding: 1rem 1.5rem; border-radius: .75rem; }
+.grade { font-size: 3.5rem; font-weight: 750; line-height: 1.2; color: #205647; }
+.grade span { display: block; font-size: .8rem; font-weight: 500; }
+.factors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+article { border: 1px solid #d7e1df; border-radius: .5rem; padding: 1rem; }
+h2 { font-size: 1.4rem; margin-top: 0; }
+h3 { margin: .25rem 0; font-size: 1.05rem; }
+dl { margin-bottom: 0; }
+dl div { display: flex; justify-content: space-between; gap: 1rem; }
+dd { margin: 0; text-align: right; }
+.small, footer { font-size: .85rem; color: #52616b; }
+details { border-top: 1px solid #d7e1df; padding: .9rem 0; }
+summary { font-weight: 600; cursor: pointer; }
+.hash { overflow-wrap: anywhere; }
+a { color: #205647; text-underline-offset: .15em; }
+footer { margin-top: 2rem; }
+@media (max-width: 600px) {
+  main { padding: 2rem 1rem; }
+  form, section { padding: 1rem; }
+  .input-row { flex-direction: column; }
+  .factors { grid-template-columns: 1fr; }
 }

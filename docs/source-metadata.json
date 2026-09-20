@@ -1,0 +1,104 @@
+[
+  {
+    "id": "1d5c2411-9719-4c8f-b99d-57a5f4a4ae41",
+    "catalogUrl": "https://www.data.gv.at/datasets/1d5c2411-9719-4c8f-b99d-57a5f4a4ae41",
+    "metadataUrl": "https://www.data.gv.at/api/hub/search/datasets/1d5c2411-9719-4c8f-b99d-57a5f4a4ae41",
+    "retrievedAt": "2026-09-17T07:29:14.5506509Z",
+    "title": "Adressen Standorte Wien",
+    "metadataModified": "2025-11-20",
+    "updateFrequency": "continuous",
+    "jsonDistributions": [
+      {
+        "url": [
+          "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:ADRESSENOGD&srsName=EPSG:4326&outputFormat=json&cql_filter=GEB_BEZIRK='01'"
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/deed.de"
+      }
+    ]
+  },
+  {
+    "id": "22add642-d849-48ff-9913-8c7ba2d99b46",
+    "catalogUrl": "https://www.data.gv.at/datasets/22add642-d849-48ff-9913-8c7ba2d99b46",
+    "metadataUrl": "https://www.data.gv.at/api/hub/search/datasets/22add642-d849-48ff-9913-8c7ba2d99b46",
+    "retrievedAt": "2026-09-17T07:29:14.6016931Z",
+    "title": "Parkanlagen Standorte Wien",
+    "metadataModified": "2025-11-20",
+    "updateFrequency": "continuous",
+    "jsonDistributions": [
+      {
+        "url": [
+          "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:PARKINFOOGD&srsName=EPSG:4326&outputFormat=json"
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/deed.de"
+      }
+    ]
+  },
+  {
+    "id": "cf00fe06-e4b2-4319-af00-85230e7b2f1b",
+    "catalogUrl": "https://www.data.gv.at/datasets/cf00fe06-e4b2-4319-af00-85230e7b2f1b",
+    "metadataUrl": "https://www.data.gv.at/api/hub/search/datasets/cf00fe06-e4b2-4319-af00-85230e7b2f1b",
+    "retrievedAt": "2026-09-17T07:29:14.6406928Z",
+    "title": "Apotheken Standorte Wien",
+    "metadataModified": "2025-12-17",
+    "updateFrequency": "continuous",
+    "jsonDistributions": [
+      {
+        "url": [
+          "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:APOTHEKEOGD&srsName=EPSG:4326&outputFormat=json"
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/deed.de"
+      }
+    ]
+  },
+  {
+    "id": "21fca925-12ac-4215-ba1a-a9c73cb3b082",
+    "catalogUrl": "https://www.data.gv.at/datasets/21fca925-12ac-4215-ba1a-a9c73cb3b082",
+    "metadataUrl": "https://www.data.gv.at/api/hub/search/datasets/21fca925-12ac-4215-ba1a-a9c73cb3b082",
+    "retrievedAt": "2026-09-17T07:29:14.6719363Z",
+    "title": "Haltestellen Standorte Wien",
+    "metadataModified": "2025-11-20",
+    "updateFrequency": "continuous",
+    "jsonDistributions": [
+      {
+        "url": [
+          "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:HALTESTELLEWLOGD&srsName=EPSG:4326&outputFormat=json"
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/deed.de"
+      }
+    ]
+  },
+  {
+    "id": "2adc5a86-faa3-4b63-acff-a66128b811b7",
+    "catalogUrl": "https://www.data.gv.at/datasets/2adc5a86-faa3-4b63-acff-a66128b811b7",
+    "metadataUrl": "https://www.data.gv.at/api/hub/search/datasets/2adc5a86-faa3-4b63-acff-a66128b811b7",
+    "retrievedAt": "2026-09-17T07:29:14.7091185Z",
+    "title": "Büchereien Standorte Wien",
+    "metadataModified": "2025-11-20",
+    "updateFrequency": "continuous",
+    "jsonDistributions": [
+      {
+        "url": [
+          "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:BUECHEREIOGD&srsName=EPSG:4326&outputFormat=json"
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/deed.de"
+      }
+    ]
+  },
+  {
+    "id": "2ee6b8bf-6292-413c-bb8b-bd22dbb2ad4b",
+    "catalogUrl": "https://www.data.gv.at/datasets/2ee6b8bf-6292-413c-bb8b-bd22dbb2ad4b",
+    "metadataUrl": "https://www.data.gv.at/api/hub/search/datasets/2ee6b8bf-6292-413c-bb8b-bd22dbb2ad4b",
+    "retrievedAt": "2026-09-17T07:29:14.7505600Z",
+    "title": "Bezirksgrenzen Wien",
+    "metadataModified": "2025-11-20",
+    "updateFrequency": "irregular",
+    "jsonDistributions": [
+      {
+        "url": [
+          "https://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:BEZIRKSGRENZEOGD&srsName=EPSG:31256&outputFormat=json"
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/deed.de"
+      }
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+.git
+**/node_modules
+**/dist
+**/target
+**/.angular
+**/data-cache
+**/*.log
+.idea
+.vscode
+docs/evidence
+**/.env
+**/.env.*
