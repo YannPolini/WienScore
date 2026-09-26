@@ -25,8 +25,19 @@ class AddressLookupTest {
         lookup.resolve("O'Brien-Gasse 1");
         assertEquals("NAME = 'O''Brien-Gasse 1'", source.requests.getFirst().get("CQL_FILTER"));
     }
+    @Test void englishCitySuffixUsesTheSameExactQuery() {
+        assertEquals("RESOLVED", lookup.resolve("Hoher Markt 1, 1010 Vienna").status());
+        assertEquals("NAME = 'Hoher Markt 1' AND PLZ = '1010'", source.requests.getFirst().get("CQL_FILTER"));
+    }
+    @Test void apartmentDetailsHaveActionableFeedbackWithoutGuessingTheBuilding() {
+        for (String input : new String[]{"Marchfeldstraße 10 Top 2 1200 Vienna", "Hoher Markt 1, Tür 3", "Hoher Markt 1 Stiege 2"}) {
+            var error = assertThrows(IllegalArgumentException.class, () -> lookup.resolve(input));
+            assertTrue(error.getMessage().contains("Leave out apartment"));
+        }
+        assertTrue(source.requests.isEmpty());
+    }
     @Test void emptyAndMalformedInputsDoNotCallSource() {
-        for (String input : new String[]{"", " ", "Wien", "Hoher Markt", "Hoher Markt 1, Berlin", "x".repeat(161), "Hoher\nMarkt 1"}) {
+        for (String input : new String[]{"", " ", "Wien", "Hoher Markt", "Hoher Markt 1, Berlin", "x".repeat(161), "Hoher\nMarkt 1", "123 456", "Hoher Markt 1\u0000"}) {
             assertThrows(IllegalArgumentException.class, () -> lookup.resolve(input));
         }
         assertTrue(source.requests.isEmpty());

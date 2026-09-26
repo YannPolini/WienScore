@@ -1,4 +1,4 @@
-# First milestone API
+# Assessment API
 
 All coordinates are WGS84 / EPSG:4326, longitude then latitude internally.
 The browser uses relative `/api` URLs; development forwards them to port 8081.
@@ -9,19 +9,24 @@ Docker serves Angular and the API from the same origin.
 `POST /api/assessments`, `Content-Type: application/json`:
 
 ```json
-{"address":"Hoher Markt 1, 1010 Wien"}
+{"address":"Hoher Markt 1, 1010 Wien","profile":"SENIOR"}
 ```
 
-The student profile is fixed for this milestone. There is no user-supplied profile,
-coordinate or weight override. `POST /api/addresses/resolve` accepts the same body
-and exposes just the address resolution step for development.
+`profile` accepts `STUDENT` or `SENIOR` (case-insensitive, surrounding spaces ignored).
+Omitted/null profile defaults to Student for compatibility with the original API.
+Empty or unknown values receive HTTP 400, never a silently substituted profile.
+There is no coordinate or weight override. `POST /api/addresses/resolve` accepts
+an address-only body and exposes just the address resolution step for development.
 
 Input is limited to 160 characters. Leading/trailing spaces and repeated ordinary
 whitespace are normalized. Supported forms: `Hoher Markt 1`, `Hoher Markt 1 Wien`,
-`Hoher Markt 1, 1010 Wien`, `Hoher Markt 1 1010`. Simple house-letter suffixes and
+`Hoher Markt 1, 1010 Wien`, `Hoher Markt 1 1010`, `Hoher Markt 1, 1010 Vienna`. Simple house-letter suffixes and
 number ranges/slashes are accepted syntactically; they must exist exactly in the
 source table. Street spelling/case must match the source. No fuzzy geocoder,
-autocomplete, aliases, apartment parsing or arbitrary city suffixes are promised.
+autocomplete, street aliases or arbitrary city suffixes are promised. Explicit
+Top/Tür/Wohnung/Apartment/Apt/Stiege number markers are rejected with guidance to
+enter the building address. They are not silently stripped; a slash remains part
+of the exact house number, not an assumed apartment separator.
 The postcode, when supplied, participates in the query; it is not a boundary check.
 
 The backend uses an exact `NAME = '...'` filter and optional `PLZ = '...'`.
@@ -49,7 +54,9 @@ Infrastructure failures can still return ordinary HTTP errors; the browser handl
 
 Fields:
 
-- `status`, `message`, `profile: "Student"`, `modelVersion: "student-draft-v1"`.
+- `status`, `message`, `profile: "Student" | "Senior"`, `profileDescription`,
+  `modelVersion: "profiles-draft-v1"`. Description explains provisional priorities,
+  not a validated claim about every member of a demographic group.
 - `location`: source ID, resolved label, longitude and latitude; null unless uniquely resolved.
 - `candidates`: up to 10 records on ambiguity; otherwise empty.
 - `addressRetrievedAt`: UTC retrieval time for the lookup, or null if unavailable.
@@ -69,9 +76,14 @@ weights are never renormalized.
 
 ## Interface behavior
 
-One labeled address field and a submit button lead to a loading message, followed
+One labeled profile selector, address field and submit button lead to a loading message, followed
 by either a result or actionable explanation. The result identifies the actual
 location, grade, profile, factors and source snapshots. Changing the input clears
-all previous output. During a request the controls are disabled to avoid racing
-requests. Source failures/fallbacks are expanded by default. Cards stack on narrow
-screens; controls and source disclosures support keyboard navigation.
+all previous output, including source details, on either address or profile changes.
+During a request the controls are disabled to avoid racing requests. Duplicate
+submissions are ignored. After 120 seconds a client timeout cancels the subscription
+and enables retry. Source failures/fallbacks are expanded by default; fallback dates
+also appear near the result. Missing datasets never show an overall-score explanation.
+Cards explain each contribution and zero-score distance limits. Cards stack on narrow
+screens; controls and source disclosures support keyboard navigation. A persistent
+polite live region announces outcomes; HTTP errors use an alert.

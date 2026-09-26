@@ -18,7 +18,10 @@ label { display: block; font-weight: 650; }
 form, section { margin-top: 2rem; padding: 1.5rem; background: white; border: 1px solid #d7e1df; border-radius: 1rem; }
 .eyebrow { color: #365f55; font-size: .9rem; }
 .input-row { display: flex; gap: .75rem; }
-input, button { font: inherit; border-radius: .5rem; padding: .75rem 1rem; }
+input, select, button { font: inherit; border-radius: .5rem; padding: .75rem 1rem; }
+select { margin-top: .5rem; background: white; border: 1px solid #687e79; }
+.warning { color: #75410b; }
+.result-announcement { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 input { flex: 1; min-width: 0; border: 1px solid #687e79; }
 button { background: #205647; color: white; border: 0; cursor: pointer; }
 button:disabled { opacity: .65; cursor: wait; }

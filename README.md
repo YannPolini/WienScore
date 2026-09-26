@@ -1,14 +1,14 @@
 # WienScore
 
 A Vienna address-to-grade prototype for the Innovation Lab 2 individual retake,
-project **LQ_Web**. The first milestone uses a fixed **student** profile and real
+project **LQ_Web**. Choose a **student** or **senior** profile using real
 Vienna open data: parks, Wiener Linien stops, pharmacies and municipal libraries.
 
 Try **Hoher Markt 1, 1010 Wien**. The app shows the resolved location, a grade from
 1 (best) to 5, nearest places/distances, contributions and source snapshots.
 The weights and thresholds are provisional assumptions, not validated research
-or an official quality-of-life rating. Senior selection and broader address
-support remain Sprint 2 work.
+or an official quality-of-life rating. Both profiles use the same measured distances
+with different documented weights. Exact street spelling is still required.
 
 ## Quick start with Docker
 
@@ -95,11 +95,12 @@ npm test -- --watch=false
 npm run build
 ```
 
-The backend suite includes calculation boundaries, the documented student-weight
+The backend suite includes calculation boundaries, both documented profile-weight
 example, geometry, exact address queries, ambiguity, missing/invalid data, timeout
 fallback, cache expiry/corruption and an HTTP integration flow against a local WFS
 fixture. Angular checks the form, loading/errors, result details, stale-result
-clearing, ambiguity and fallback display. Automated tests do not need live Vienna
+clearing on address/profile changes, ambiguity, fallback display, request timeout
+and retry. Automated tests do not need live Vienna
 data. The smoke script and browser acceptance checks do.
 
 Backend JAR: `backend/target/wienscore-0.0.1-SNAPSHOT.jar`.
@@ -114,16 +115,23 @@ See [acceptance evidence](docs/ACCEPTANCE.md) for actual results and limits.
 - [Implementation/verification record](docs/ACCEPTANCE.md)
 
 Model rules live in `ScoringModel.java`: distance limits 1000/800/1000/2000 m,
-student weights 25/40/10/25%, linear distance scores and grade cutoffs
-80/60/40/20. Change the model version when changing the rules. No weights are
+student weights 25/40/10/25%, senior weights 35/25/35/5%, linear distance scores and grade cutoffs
+80/60/40/20. Current model: `profiles-draft-v1`. Change the model version when changing the rules. No weights are
 silently renormalized. Grades require all four categories and a verified location
 inside Vienna's district polygons. Missing names are disclosed; missing or invalid
 coordinates invalidate a snapshot.
 
 Address lookup is deliberately exact: street and house number, optionally postcode
-and Wien. No fuzzy matching or autocomplete is implemented. No-match, ambiguity,
+and Wien or Vienna. Leave out apartment/Top/Tür/Stiege numbers; explicit markers
+produce helpful feedback, not a guessed building. For example, use
+`Marchfeldstraße 10, 1200 Wien`, including the correct street spelling.
+No fuzzy matching or autocomplete is implemented. No-match, ambiguity,
 invalid input, out-of-boundary coordinates and unusable data give explicit outcomes.
 The UI never silently picks an ambiguous result or keeps a result for edited input.
+The chosen profile is sent with each request; controls are disabled during the
+calculation. A request that stalls for two minutes ends with a retry message.
+Older-snapshot fallbacks are highlighted above the result as well as in source
+details. Incomplete data show individual available factors without a partial grade.
 
 Datenquelle: Stadt Wien – https://data.wien.gv.at. Selected data: **CC BY 4.0**.
 WienScore derives distances and scores from the source data. See the source manifest

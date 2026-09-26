@@ -1,4 +1,4 @@
-# Sources and provisional student model
+# Sources and provisional profile model
 
 WienScore is a student project estimate of access to selected amenities. It is
 not an official City of Vienna rating and does not measure overall quality of life.
@@ -36,14 +36,14 @@ latitude. Download caps: parks 5,000, stops 10,000, pharmacies 2,000, libraries 
 districts 100. A cap is not pagination: a larger advertised total fails closed
 until the implementation is revised. No live source is contacted in automated tests.
 
-## Model student-draft-v1
+## Model profiles-draft-v1
 
-| Factor | Weight | Zero-score distance D | Provisional rationale |
-|---|---:|---:|---|
-| Parks | 25% | 1,000 m | Access to outdoor recreation |
-| Public transport stops | 40% | 800 m | Access to local public transport |
-| Pharmacies | 10% | 1,000 m | Access to an everyday health service |
-| Municipal libraries | 25% | 2,000 m | Access to library services |
+| Factor | Student weight | Senior weight | Zero-score distance D | Provisional rationale |
+|---|---:|---:|---:|---|
+| Parks | 25% | 35% | 1,000 m | Access to outdoor recreation |
+| Public transport stops | 40% | 25% | 800 m | Access to local public transport |
+| Pharmacies | 10% | 35% | 1,000 m | Access to an everyday health service |
+| Municipal libraries | 25% | 5% | 2,000 m | Access to library services |
 
 1. Find the nearest mapped point in each complete dataset using haversine distance
    with mean Earth radius 6,371,000 m. Exact distance ties use source ID ordering.
@@ -55,8 +55,13 @@ Calculations and grade comparisons use unrounded values. Only the interface roun
 distances/scores. Consequently displayed contributions can differ slightly from
 the displayed total when summed. The rules and version are centralized in
 `ScoringModel.java`; change the version whenever rules change. The controlled
-student example (100, 50, 0, 100) produces score 70 and grade 2. Senior weights and
-selection remain Sprint 2 work; their acceptance check is not claimed complete.
+example (100, 50, 0, 100) produces Student score 70 / grade 2 and Senior score
+52.5 / grade 3. Both are tested. Identical real locations may receive the same
+integer grade under both profiles; selection changes weights, not measurements.
+The student rules are numerically unchanged from `student-draft-v1`; the new model
+version identifies the addition of the documented senior rules. Historical Sprint 1
+evidence retains its original model identifier. The profile descriptions are draft
+design rationales, not research findings or claims about individual preferences.
 
 ## Validation and cache policy
 
@@ -113,4 +118,4 @@ changed amenities: the raw response also contains a service timestamp.
 - Exact-address coverage and usability need broader testing. A failed Vienna-only
   search cannot reliably distinguish a typo from an outside-Vienna address.
 
-No account, database, map, air-quality integration or additional profile is included.
+No account, database, map, air-quality integration or profile beyond Student/Senior is included.

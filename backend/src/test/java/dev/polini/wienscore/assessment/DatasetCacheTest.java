@@ -5,6 +5,8 @@ import java.nio.file.*;
 import java.time.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import tools.jackson.databind.json.JsonMapper;
 
 class DatasetCacheTest {
@@ -58,23 +60,48 @@ class DatasetCacheTest {
         assertEquals(first.snapshot().sha256(), newCache().get(Dataset.PARKS).snapshot().sha256());
     }
 
-    @Test void incompleteOrInvalidMandatoryDataWithNoCacheWithholdsTheGrade() {
+    @ParameterizedTest @EnumSource(ScoringModel.Profile.class)
+    void incompleteOrInvalidMandatoryDataWithNoCacheWithholdsTheGrade(ScoringModel.Profile profile) {
         source.handler = q -> q.get("typeName").endsWith("PARKINFOOGD")
                 ? new WfsFixture.Response(200, WfsFixture.collection(7), 0)
                 : new WfsFixture.Response(200, WfsFixture.standard(q), 0);
-        var result = new AssessmentService(new AddressLookup(wfs), cache).assess("Hoher Markt 1");
+        var result = new AssessmentService(new AddressLookup(wfs), cache).assess("Hoher Markt 1", profile);
         assertEquals("DATA_UNAVAILABLE", result.status());
         assertNull(result.grade());
         assertNull(result.score());
         assertTrue(result.message().contains("Parks"));
         assertEquals(3, result.factors().size());
+        assertEquals(profile.label, result.profile());
+        assertEquals(ScoringModel.rules(profile).get(1).weight(), result.factors().getFirst().weight());
+    }
+
+    @ParameterizedTest @EnumSource(ScoringModel.Profile.class)
+    void assessmentDisclosesFallbackAndWithholdsGradeAtExactCacheExpiry(ScoringModel.Profile profile) {
+        var service = new AssessmentService(new AddressLookup(wfs), cache);
+        var first = service.assess("Hoher Markt 1", profile);
+        assertEquals("OK", first.status());
+        clock.advance(Duration.ofHours(25));
+        source.handler = q -> q.get("typeName").endsWith("ADRESSENOGD")
+                ? new WfsFixture.Response(200, WfsFixture.standard(q), 0) : new WfsFixture.Response(503, "down", 0);
+        var fallback = service.assess("Hoher Markt 1", profile);
+        assertEquals(first.score(), fallback.score());
+        assertTrue(fallback.sources().stream().allMatch(s -> s.state().equals("STALE_FALLBACK")));
+        for (int i = 0; i < 5; i++) {
+            assertEquals(first.sources().get(i).retrievedAt(), fallback.sources().get(i).retrievedAt());
+            assertEquals(first.sources().get(i).sha256(), fallback.sources().get(i).sha256());
+        }
+        clock.advance(Duration.ofHours(143)); // Exactly seven days after the original retrieval.
+        var expired = service.assess("Hoher Markt 1", profile);
+        assertEquals("DATA_UNAVAILABLE", expired.status());
+        assertNull(expired.grade());
+        assertNull(expired.score());
     }
 
     @Test void unavailableBoundaryBlocksScoringBeforeAmenitiesLoad() {
         source.handler = q -> q.get("typeName").endsWith("BEZIRKSGRENZEOGD")
                 ? new WfsFixture.Response(503, "down", 0)
                 : new WfsFixture.Response(200, WfsFixture.standard(q), 0);
-        var result = new AssessmentService(new AddressLookup(wfs), cache).assess("Hoher Markt 1");
+        var result = new AssessmentService(new AddressLookup(wfs), cache).assess("Hoher Markt 1", ScoringModel.Profile.STUDENT);
         assertEquals("DATA_UNAVAILABLE", result.status());
         assertNull(result.grade());
         assertEquals(2, source.requests.size());

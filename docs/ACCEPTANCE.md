@@ -94,3 +94,48 @@ clean-machine validation/export; actual effort and formal review details, remain
 video and ZIP. No external approval or lecturer response is claimed. No overall
 study-plan or workload estimates were changed. This implementation uses the accepted
 sprint structure and ignores the unreliable LifeDash workload forecasts.
+
+## Sprint 2 implementation on 17 September 2026
+
+The records above preserve the Sprint 1 milestone. The current application adds
+Student/Senior selection, profile-specific explanations, visible fallback warnings,
+explicit apartment-number guidance, the English Vienna suffix, and timeout/retry
+handling. Model `profiles-draft-v1` retains the original student calculations and
+adds the documented senior weights. No research validation is implied.
+
+Verification performed:
+
+- Local Maven verify: **45 tests passed**, no failures/errors/skips.
+- Angular: **14 tests passed** and production build succeeded.
+- Docker build repeated both suites successfully; the rebuilt application started
+  on port 8081 as user `10001:10001`.
+- The updated live smoke script checked both profiles, repeated results, unchanged
+  distances and source hashes across profiles, contribution sums and no-match behavior.
+- Browser checks: keyboard form submission; disabled controls while loading;
+  profile switching clears the prior result and source details; the senior result
+  shows new weights/contributions; apartment markers produce helpful feedback;
+  390 × 844 mobile layout remains readable without horizontal page overflow.
+
+Live Hoher Markt 1 result with identical source snapshots:
+
+| Profile | Score (unrounded) | Grade |
+|---|---:|---:|
+| Student | 77.8394350333933 | 2 |
+| Senior | 85.5878386165122 | 1 |
+
+Full responses: [sprint2-profiles.json](evidence/sprint2-profiles.json).
+Docker image: `sha256:6174f47408562d12c640b15ed32186aeaf0836394d981e6bf78a9817e29f0c86`.
+
+AT-04 now passes the controlled two-profile example (70/2 and 52.5/3), HTTP profile
+selection and browser switching. AT-05 now covers both profiles, contribution
+explanations, rounding, result clearing and avoiding an overall-score explanation
+on partial data. AT-06/07 coverage adds English city suffixes, explicit apartment
+markers, invalid profiles/bodies, both-profile missing data, fallback and exact
+seven-day expiry. AT-08 adds a persistent outcome announcement region and tested
+client timeout/retry. This is representative coverage, not an exhaustive claim.
+
+Remaining: research/calibration and contrasting-location plausibility checks;
+broader real-address coverage (lookup still requires exact street spelling);
+screen-reader/cross-browser verification; independent clean-machine handover and
+final export; actual effort and formal review details. No formal Sprint 2 review,
+course approval or final project acceptance is claimed.

@@ -12,7 +12,7 @@ class ScoringModelTest {
     void gradeBoundaries(double score, int grade) { assertEquals(grade, ScoringModel.grade(score)); }
 
     @Test void categoryBoundariesForEveryDraftThreshold() {
-        for (var rule : ScoringModel.RULES) {
+        for (var profile : ScoringModel.Profile.values()) for (var rule : ScoringModel.rules(profile)) {
             double d = rule.distanceLimitMetres();
             assertEquals(100, ScoringModel.categoryScore(0, d));
             assertEquals(50, ScoringModel.categoryScore(d / 2, d));
@@ -21,13 +21,18 @@ class ScoringModelTest {
         }
     }
 
-    @Test void studentWeightsMatchDocumentedControlledExample() {
+    @ParameterizedTest
+    @CsvSource({"STUDENT,70,2", "SENIOR,52.5,3"})
+    void profileWeightsMatchDocumentedControlledExample(ScoringModel.Profile profile, double expected, int grade) {
         double[] categoryScores = {100, 50, 0, 100};
+        var rules = ScoringModel.rules(profile);
         double result = 0;
-        for (int i = 0; i < categoryScores.length; i++) result += categoryScores[i] * ScoringModel.RULES.get(i).weight();
-        assertEquals(1, ScoringModel.RULES.stream().mapToDouble(ScoringModel.Rule::weight).sum());
-        assertEquals(70, result);
-        assertEquals(2, ScoringModel.grade(result));
+        for (int i = 0; i < categoryScores.length; i++) result += categoryScores[i] * rules.get(i).weight();
+        assertEquals(1, rules.stream().mapToDouble(ScoringModel.Rule::weight).sum(), 1e-12);
+        assertEquals(expected, result, 1e-12);
+        assertEquals(grade, ScoringModel.grade(result));
+        assertEquals(4, rules.stream().map(ScoringModel.Rule::dataset).distinct().count());
+        assertTrue(rules.stream().allMatch(rule -> rule.weight() > 0));
     }
 
     @Test void invalidMeasurementsCannotBecomeFavourableScores() {

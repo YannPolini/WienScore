@@ -58,9 +58,61 @@ class AssessmentIntegrationTest {
     }
 
     @Test void apiRejectsBlankAndMalformedBodies() throws Exception {
-        for (String body : new String[]{"{\"address\":\" \"}", "{}", "not json"}) {
+        for (String body : new String[]{"{\"address\":\" \"}", "{}", "not json", "null", "[]", "{\"address\":null}"}) {
             mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON).content(body))
                     .andExpect(status().isBadRequest()).andExpect(jsonPath("$.status").value("INVALID_INPUT"));
+        }
+    }
+
+    @Test void profilesChangeWeightsButNotMeasurementsAndRepeatWithSameSnapshots() throws Exception {
+        var student = mapper.readTree(mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"address\":\"Hoher Markt 1\",\"profile\":\"STUDENT\"}"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        var senior = mapper.readTree(mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"address\":\"Hoher Markt 1\",\"profile\":\" senior \"}"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.profile").value("Senior"))
+                .andExpect(jsonPath("$.modelVersion").value("profiles-draft-v1"))
+                .andExpect(jsonPath("$.profileDescription").isNotEmpty())
+                .andReturn().getResponse().getContentAsString());
+        double[] weights = {.35, .25, .35, .05};
+        double expected = 0;
+        for (int i = 0; i < weights.length; i++) {
+            var factor = senior.path("factors").get(i);
+            assertEquals(student.path("factors").get(i).path("distanceMetres"), factor.path("distanceMetres"));
+            assertEquals(student.path("factors").get(i).path("nearestId"), factor.path("nearestId"));
+            assertEquals(weights[i], factor.path("weight").asDouble());
+            expected += factor.path("score").asDouble() * weights[i];
+        }
+        assertEquals(expected, senior.path("score").asDouble(), 1e-10);
+        assertNotEquals(student.path("score"), senior.path("score"));
+        var repeat = mapper.readTree(mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"address\":\"Hoher Markt 1\",\"profile\":\"SENIOR\"}"))
+                .andReturn().getResponse().getContentAsString());
+        assertEquals(senior.path("score"), repeat.path("score"));
+        for (int i = 0; i < 5; i++) assertEquals(student.path("sources").get(i).path("sha256"), senior.path("sources").get(i).path("sha256"));
+    }
+
+    @Test void invalidProfilesNeverSilentlyBecomeStudent() throws Exception {
+        SOURCE.requests.clear();
+        for (String profile : new String[]{"", "Family", "STUDENT,SENIOR"}) {
+            mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(java.util.Map.of("address", "Hoher Markt 1", "profile", profile))))
+                    .andExpect(status().isBadRequest()).andExpect(jsonPath("$.status").value("INVALID_INPUT"))
+                    .andExpect(jsonPath("$.message").value("Choose Student or Senior as the profile."));
+        }
+        assertTrue(SOURCE.requests.isEmpty());
+    }
+
+    @Test void lookupFailureAndNoMatchPreserveSeniorProfileWithoutGrade() throws Exception {
+        for (var response : new WfsFixture.Response[]{new WfsFixture.Response(503, "down", 0),
+                new WfsFixture.Response(200, WfsFixture.collection(0), 0)}) {
+            SOURCE.handler = q -> response;
+            mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"address\":\"Hoher Markt 1\",\"profile\":\"SENIOR\"}"))
+                    .andExpect(status().isOk()).andExpect(jsonPath("$.profile").value("Senior"))
+                    .andExpect(jsonPath("$.score").isEmpty()).andExpect(jsonPath("$.grade").isEmpty())
+                    .andExpect(jsonPath("$.factors").isEmpty());
         }
     }
 

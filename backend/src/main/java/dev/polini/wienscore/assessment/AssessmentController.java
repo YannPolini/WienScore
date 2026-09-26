@@ -10,15 +10,18 @@ import org.springframework.web.bind.annotation.*;
 class AssessmentController {
     private final AddressLookup lookup;
     private final AssessmentService assessments;
-    record Request(String address) {}
+    record AddressRequest(String address) {}
+    record AssessmentRequest(String address, String profile) {}
 
     AssessmentController(AddressLookup lookup, AssessmentService assessments) { this.lookup = lookup; this.assessments = assessments; }
 
     @PostMapping("/addresses/resolve")
-    AddressLookup.Result resolve(@RequestBody Request request) { return lookup.resolve(request.address()); }
+    AddressLookup.Result resolve(@RequestBody AddressRequest request) { return lookup.resolve(request.address()); }
 
     @PostMapping("/assessments")
-    AssessmentService.Assessment assess(@RequestBody Request request) { return assessments.assess(request.address()); }
+    AssessmentService.Assessment assess(@RequestBody AssessmentRequest request) {
+        return assessments.assess(request.address(), ScoringModel.Profile.parse(request.profile()));
+    }
 
     @ExceptionHandler({IllegalArgumentException.class, HttpMessageNotReadableException.class})
     ResponseEntity<Map<String, String>> invalid(Exception ex) {

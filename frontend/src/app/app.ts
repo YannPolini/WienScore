@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { DatePipe, DecimalPipe } from '@angular/common';
+import { timeout } from 'rxjs';
 
 interface Match { id: string; label: string; longitude: number; latitude: number; }
 interface Factor {
@@ -14,7 +15,7 @@ interface Source {
   unnamedFeatures: number | null; state: string; message: string; limitation: string;
 }
 export interface Assessment {
-  status: string; message: string; profile: string; modelVersion: string;
+  status: string; message: string; profile: string; profileDescription: string; modelVersion: string;
   location: Match | null; candidates: Match[]; addressRetrievedAt: string | null;
   score: number | null; grade: number | null; factors: Factor[]; sources: Source[];
 }
@@ -28,6 +29,7 @@ export interface Assessment {
 export class App {
   private readonly http = inject(HttpClient);
   address = '';
+  profile: 'STUDENT' | 'SENIOR' = 'STUDENT';
   readonly busy = signal(false);
   readonly error = signal('');
   readonly result = signal<Assessment | null>(null);
@@ -46,10 +48,12 @@ export class App {
       return;
     }
     this.busy.set(true);
-    this.http.post<Assessment>('/api/assessments', { address: this.address }).subscribe({
+    this.http.post<Assessment>('/api/assessments', { address: this.address, profile: this.profile })
+      .pipe(timeout(120_000)).subscribe({
       next: (result) => { this.result.set(result); this.busy.set(false); },
       error: (error) => {
-        this.error.set(typeof error.error?.message === 'string'
+        this.error.set(error.name === 'TimeoutError'
+          ? 'The calculation took too long. Please try again.' : typeof error.error?.message === 'string'
           ? error.error.message : 'The server could not be reached. Please try again.');
         this.busy.set(false);
       },
