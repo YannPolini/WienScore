@@ -139,3 +139,55 @@ broader real-address coverage (lookup still requires exact street spelling);
 screen-reader/cross-browser verification; independent clean-machine handover and
 final export; actual effort and formal review details. No formal Sprint 2 review,
 course approval or final project acceptance is claimed.
+
+## Sprint 3 validation and handover on 17 September 2026
+
+Candidate revision **4d905e5e3102fa43da8ab9043fed74089f483a6c** contains the
+unchanged `profiles-draft-v1` app plus live validation and Docker export tooling.
+The [validation report](VALIDATION.md) records research rationale, six successful
+addresses across five districts, 12 independently recomputed scores/grades,
+11 input cases and 11 sensitivity scenarios per address/profile. All 48 nearest
+amenity IDs/distances matched a separate scan of checksum-verified saved datasets.
+
+The sample exposes grade sensitivity and exact-name coverage limits. In particular,
+ordinary `Karlsplatz 13, 1040 Wien` fails because the WFS label includes a university
+annotation. No-match cases are retained in the evidence; no parameter fitting,
+ground-truth well-being validation or comprehensive address coverage is claimed.
+
+The export script archived the clean committed tree and built it with `--no-cache`.
+Fresh dependency installation, **45 backend tests**, **14 Angular tests** and
+production build all passed. Base images were available on this Docker host; this
+does not establish an empty Docker installation or byte-reproducible rebuild.
+Build dependencies/base tags can change; the exported image is identified by hash.
+
+| Export/startup check | Observed result |
+|---|---|
+| Image | `sha256:14f627c50212b5adff0d401c99d12c6130ee7e5ded172bcb204ad65c14b73ce0` |
+| Platform and runtime user | Linux amd64; `10001:10001`, confirmed with `id` |
+| Compressed image bytes | 118,462,381 |
+| Source ZIP bytes | 153,800 |
+| Software files total | 118,621,666 bytes plus manifest; excludes academic artifacts |
+| Load | `docker load --input wienscore-image.tar.gz` succeeded |
+| Isolated startup | New Compose project `wienscore-handover-check`, new named cache, port 8082, no host build/source mounts |
+| Live smoke | Angular root and health; Student 77.8394350333933/2 and Senior 85.5878386165122/1; repeated score/hashes, contribution sum and no-match all passed |
+| Cleanup | Test container/network stopped/removed with Compose down; test cache retained; development app on 8081 unaffected |
+
+Manifest: [sprint3-handover-manifest.json](evidence/sprint3-handover-manifest.json).
+The academic project folder holds **Handover Candidate 4d905e5**, containing the
+image, matching source, startup instructions, smoke script and manifest. This is
+a candidate, not the final submission ZIP. Follow [handover instructions](HANDOVER.md).
+
+Browser acceptance added live Am Himmel Student/Senior results, three zero-factor
+explanations, clearing on profile change, keyboard expansion of source details and
+a 320 × 800 view. The form and factor cards were readable; client and scroll widths
+were both 305 px (remaining width is the scrollbar). Viewport override was reset.
+The connected in-app browser was the only available browser surface. These checks
+are not an actual screen-reader or second-browser test.
+
+AT-01/02/03/04/05/06/07 retain their existing passing representative checks with the
+additional evidence above. AT-08 passes basic keyboard/responsive use; actual
+assistive-technology/other-browser checks remain open. AT-09 now has a committed
+source build and loadable-image empty-cache startup here; second-machine acceptance
+remains open. Formal review and actual effort remain blank. Submission preparation
+still needs source access/history, remaining diary/estimation fields, slides,
+user-recorded video, final combined ZIP size and upload verification. No remote push.

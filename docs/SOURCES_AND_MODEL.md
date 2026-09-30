@@ -4,8 +4,9 @@ WienScore is a student project estimate of access to selected amenities. It is
 not an official City of Vienna rating and does not measure overall quality of life.
 The factors, weights and distance limits below are engineering starting assumptions
 from the project dataset check dated 14 September 2026. They are **not validated
-research findings**. Research, calibration and contrasting-address plausibility
-checks remain required before presenting a final model.
+research findings**. Sprint 3's [research and validation](VALIDATION.md) records
+factor rationale, six contrasting addresses and sensitivity analysis. Numeric
+calibration against independent outcomes remains open; the model stays provisional.
 
 ## Source manifest
 

@@ -1,0 +1,2592 @@
+{
+  "checkedAt": "2026-09-17T14:55:07.079717+00:00",
+  "modelVersion": "profiles-draft-v1",
+  "addresses": [
+    {
+      "input": "Hoher Markt 1, 1010 Wien",
+      "responses": {
+        "STUDENT": {
+          "status": "OK",
+          "message": "Draft student estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Student",
+          "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593516983",
+            "label": "Hoher Markt 1, 1010 Wien",
+            "longitude": 16.37307549,
+            "latitude": 48.21053772
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:07.894936043Z",
+          "score": 77.8394350333933,
+          "grade": 2,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840877",
+              "nearestName": "GA Morzinplatz",
+              "distanceMetres": 256.8554655612805,
+              "distanceLimitMetres": 1000.0,
+              "score": 74.31445344387195,
+              "weight": 0.25,
+              "contribution": 18.57861336096799
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.1073",
+              "nearestName": "Rotenturmstraße",
+              "distanceMetres": 103.23157063014247,
+              "distanceLimitMetres": 800.0,
+              "score": 87.09605367123218,
+              "weight": 0.4,
+              "contribution": 34.838421468492875
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590455",
+              "nearestName": "Apotheke \"Zum rothen Krebs\"",
+              "distanceMetres": 2.4458650738646854,
+              "distanceLimitMetres": 1000.0,
+              "score": 99.75541349261353,
+              "weight": 0.1,
+              "contribution": 9.975541349261354
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710813",
+              "nearestName": "Bücherei Zirkusgasse",
+              "distanceMetres": 844.2512916263141,
+              "distanceLimitMetres": 2000.0,
+              "score": 57.7874354186843,
+              "weight": 0.25,
+              "contribution": 14.446858854671074
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        },
+        "SENIOR": {
+          "status": "OK",
+          "message": "Draft senior estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Senior",
+          "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593516983",
+            "label": "Hoher Markt 1, 1010 Wien",
+            "longitude": 16.37307549,
+            "latitude": 48.21053772
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:08.632446932Z",
+          "score": 85.58783861651217,
+          "grade": 1,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840877",
+              "nearestName": "GA Morzinplatz",
+              "distanceMetres": 256.8554655612805,
+              "distanceLimitMetres": 1000.0,
+              "score": 74.31445344387195,
+              "weight": 0.35,
+              "contribution": 26.01005870535518
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.1073",
+              "nearestName": "Rotenturmstraße",
+              "distanceMetres": 103.23157063014247,
+              "distanceLimitMetres": 800.0,
+              "score": 87.09605367123218,
+              "weight": 0.25,
+              "contribution": 21.774013417808046
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590455",
+              "nearestName": "Apotheke \"Zum rothen Krebs\"",
+              "distanceMetres": 2.4458650738646854,
+              "distanceLimitMetres": 1000.0,
+              "score": 99.75541349261353,
+              "weight": 0.35,
+              "contribution": 34.914394722414734
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710813",
+              "nearestName": "Bücherei Zirkusgasse",
+              "distanceMetres": 844.2512916263141,
+              "distanceLimitMetres": 2000.0,
+              "score": 57.7874354186843,
+              "weight": 0.05,
+              "contribution": 2.889371770934215
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        }
+      },
+      "sensitivity": {
+        "STUDENT": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 72.29929379174162,
+            "grade": 2
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 81.53286252782773,
+            "grade": 1
+          },
+          {
+            "scenario": "equal weights",
+            "score": 79.73833900660048,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 78.02496038021019,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 77.6715787672256,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 77.03451167358122,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 78.52511048804801,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 77.3921701668786,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 78.26916010122113,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 78.89480343416744,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 76.88457790888333,
+            "grade": 2
+          }
+        ],
+        "SENIOR": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 81.98479827064023,
+            "grade": 1
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 87.98986551376014,
+            "grade": 1
+          },
+          {
+            "scenario": "equal weights",
+            "score": 79.73833900660048,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 86.43637298434531,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 84.85032743699367,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 85.50845887679007,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 85.65965838102265,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 84.52146201293466,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 86.51468930934124,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 85.8686507700256,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 85.312587099702,
+            "grade": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": "Marchfeldstraße 10, 1200 Wien",
+      "responses": {
+        "STUDENT": {
+          "status": "OK",
+          "message": "Draft student estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Student",
+          "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593521678",
+            "label": "Marchfeldstraße 10, 1200 Wien",
+            "longitude": 16.37847609,
+            "latitude": 48.24183868
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:09.497866577Z",
+          "score": 78.65201086306789,
+          "grade": 2,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840559",
+              "nearestName": "PA Stromstraße",
+              "distanceMetres": 212.2328904611262,
+              "distanceLimitMetres": 1000.0,
+              "score": 78.77671095388739,
+              "weight": 0.25,
+              "contribution": 19.694177738471847
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.764",
+              "nearestName": "Leystraße",
+              "distanceMetres": 235.66123158914252,
+              "distanceLimitMetres": 800.0,
+              "score": 70.54234605135719,
+              "weight": 0.4,
+              "contribution": 28.216938420542874
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590552",
+              "nearestName": "Apotheke Aurora",
+              "distanceMetres": 281.7403257154173,
+              "distanceLimitMetres": 1000.0,
+              "score": 71.82596742845826,
+              "weight": 0.1,
+              "contribution": 7.182596742845826
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710833",
+              "nearestName": "Bücherei Leystraße",
+              "distanceMetres": 115.33616310341225,
+              "distanceLimitMetres": 2000.0,
+              "score": 94.23319184482939,
+              "weight": 0.25,
+              "contribution": 23.558297961207348
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        },
+        "SENIOR": {
+          "status": "OK",
+          "message": "Draft senior estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Senior",
+          "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593521678",
+            "label": "Marchfeldstraße 10, 1200 Wien",
+            "longitude": 16.37847609,
+            "latitude": 48.24183868
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:10.228145591Z",
+          "score": 75.05818353890174,
+          "grade": 2,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840559",
+              "nearestName": "PA Stromstraße",
+              "distanceMetres": 212.2328904611262,
+              "distanceLimitMetres": 1000.0,
+              "score": 78.77671095388739,
+              "weight": 0.35,
+              "contribution": 27.571848833860585
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.764",
+              "nearestName": "Leystraße",
+              "distanceMetres": 235.66123158914252,
+              "distanceLimitMetres": 800.0,
+              "score": 70.54234605135719,
+              "weight": 0.25,
+              "contribution": 17.635586512839296
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590552",
+              "nearestName": "Apotheke Aurora",
+              "distanceMetres": 281.7403257154173,
+              "distanceLimitMetres": 1000.0,
+              "score": 71.82596742845826,
+              "weight": 0.35,
+              "contribution": 25.139088599960388
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710833",
+              "nearestName": "Bücherei Leystraße",
+              "distanceMetres": 115.33616310341225,
+              "distanceLimitMetres": 2000.0,
+              "score": 94.23319184482939,
+              "weight": 0.05,
+              "contribution": 4.71165959224147
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        }
+      },
+      "sensitivity": {
+        "STUDENT": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 73.31501357883486,
+            "grade": 2
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 82.21000905255659,
+            "grade": 1
+          },
+          {
+            "scenario": "equal weights",
+            "score": 78.84455406963306,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 78.64544770039318,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 78.65794896263073,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 79.35719910756448,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 78.05129495108932,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 78.79131787193748,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 78.51816687415398,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 77.83194870613308,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 79.3939718621994,
+            "grade": 2
+          }
+        ],
+        "SENIOR": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 68.82272942362718,
+            "grade": 2
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 79.21515294908478,
+            "grade": 2
+          },
+          {
+            "scenario": "equal weights",
+            "score": 78.84455406963306,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 74.77829437863402,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 75.30145168754565,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 75.29585919614092,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 74.84314365854247,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 75.30146862248351,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 74.84673014849889,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 74.86449658631662,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 75.24803510628716,
+            "grade": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": "Karlsplatz 6, 1010 Wien",
+      "responses": {
+        "STUDENT": {
+          "status": "OK",
+          "message": "Draft student estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Student",
+          "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593530382",
+            "label": "Karlsplatz 6, 1010 Wien",
+            "longitude": 16.37248809,
+            "latitude": 48.20055641
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:10.930402910Z",
+          "score": 78.88922380167108,
+          "grade": 2,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840986",
+              "nearestName": "Resselpark",
+              "distanceMetres": 163.35489670514843,
+              "distanceLimitMetres": 1000.0,
+              "score": 83.66451032948515,
+              "weight": 0.25,
+              "contribution": 20.91612758237129
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.194",
+              "nearestName": "Bösendorferstraße",
+              "distanceMetres": 149.4199499847518,
+              "distanceLimitMetres": 800.0,
+              "score": 81.32250625190602,
+              "weight": 0.4,
+              "contribution": 32.52900250076241
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590517",
+              "nearestName": "Internationale Apotheke",
+              "distanceMetres": 164.5841048144958,
+              "distanceLimitMetres": 1000.0,
+              "score": 83.54158951855042,
+              "weight": 0.1,
+              "contribution": 8.354158951855043
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710808",
+              "nearestName": "Bücherei Wieden",
+              "distanceMetres": 632.8052186654127,
+              "distanceLimitMetres": 2000.0,
+              "score": 68.35973906672936,
+              "weight": 0.25,
+              "contribution": 17.08993476668234
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        },
+        "SENIOR": {
+          "status": "OK",
+          "message": "Draft senior estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Senior",
+          "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593530382",
+            "label": "Karlsplatz 6, 1010 Wien",
+            "longitude": 16.37248809,
+            "latitude": 48.20055641
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:11.474188505Z",
+          "score": 82.27074846312543,
+          "grade": 1,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840986",
+              "nearestName": "Resselpark",
+              "distanceMetres": 163.35489670514843,
+              "distanceLimitMetres": 1000.0,
+              "score": 83.66451032948515,
+              "weight": 0.35,
+              "contribution": 29.282578615319803
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.194",
+              "nearestName": "Bösendorferstraße",
+              "distanceMetres": 149.4199499847518,
+              "distanceLimitMetres": 800.0,
+              "score": 81.32250625190602,
+              "weight": 0.25,
+              "contribution": 20.330626562976505
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590517",
+              "nearestName": "Internationale Apotheke",
+              "distanceMetres": 164.5841048144958,
+              "distanceLimitMetres": 1000.0,
+              "score": 83.54158951855042,
+              "weight": 0.35,
+              "contribution": 29.239556331492647
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710808",
+              "nearestName": "Bücherei Wieden",
+              "distanceMetres": 632.8052186654127,
+              "distanceLimitMetres": 2000.0,
+              "score": 68.35973906672936,
+              "weight": 0.05,
+              "contribution": 3.4179869533364684
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        }
+      },
+      "sensitivity": {
+        "STUDENT": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 73.61152975208886,
+            "grade": 2
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 82.40768650139258,
+            "grade": 1
+          },
+          {
+            "scenario": "equal weights",
+            "score": 79.22208629166774,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 78.63789293178613,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 79.11661839823364,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 78.67763402338979,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 79.06946694613292,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 78.79427756255109,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 78.98044665886479,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 79.44340720877327,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 78.38781976667386,
+            "grade": 2
+          }
+        ],
+        "SENIOR": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 77.83843557890678,
+            "grade": 2
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 85.2256237192712,
+            "grade": 1
+          },
+          {
+            "scenario": "equal weights",
+            "score": 79.22208629166774,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 82.16584165598007,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 82.36192914597139,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 82.32065594792644,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 82.22559407211497,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 82.17509376002893,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 82.35388759759248,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 82.41126370955368,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 82.13301569682447,
+            "grade": 1
+          }
+        ]
+      }
+    },
+    {
+      "input": "Hüttelbergstraße 26, 1140 Wien",
+      "responses": {
+        "STUDENT": {
+          "status": "OK",
+          "message": "Draft student estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Student",
+          "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593527385",
+            "label": "Hüttelbergstraße 26, 1140 Wien",
+            "longitude": 16.2559654,
+            "latitude": 48.20927536
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:12.207931014Z",
+          "score": 55.434614579714435,
+          "grade": 3,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840478",
+              "nearestName": "PA Hüttelbergstraße",
+              "distanceMetres": 54.14078612032204,
+              "distanceLimitMetres": 1000.0,
+              "score": 94.5859213879678,
+              "weight": 0.25,
+              "contribution": 23.64648034699195
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.198",
+              "nearestName": "Campingplatz Wien-West 1",
+              "distanceMetres": 297.53070174359925,
+              "distanceLimitMetres": 800.0,
+              "score": 62.808662282050086,
+              "weight": 0.4,
+              "contribution": 25.123464912820037
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590759",
+              "nearestName": "Stadtfuchs Apotheke",
+              "distanceMetres": 811.1835064644491,
+              "distanceLimitMetres": 1000.0,
+              "score": 18.881649353555087,
+              "weight": 0.1,
+              "contribution": 1.8881649353555088
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710824",
+              "nearestName": "Bücherei Breitnerhof",
+              "distanceMetres": 1617.8796492362446,
+              "distanceLimitMetres": 2000.0,
+              "score": 19.10601753818777,
+              "weight": 0.25,
+              "contribution": 4.776504384546943
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        },
+        "SENIOR": {
+          "status": "OK",
+          "message": "Draft senior estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Senior",
+          "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593527385",
+            "label": "Hüttelbergstraße 26, 1140 Wien",
+            "longitude": 16.2559654,
+            "latitude": 48.20927536
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:12.864470463Z",
+          "score": 56.37111620695492,
+          "grade": 3,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840478",
+              "nearestName": "PA Hüttelbergstraße",
+              "distanceMetres": 54.14078612032204,
+              "distanceLimitMetres": 1000.0,
+              "score": 94.5859213879678,
+              "weight": 0.35,
+              "contribution": 33.10507248578873
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.198",
+              "nearestName": "Campingplatz Wien-West 1",
+              "distanceMetres": 297.53070174359925,
+              "distanceLimitMetres": 800.0,
+              "score": 62.808662282050086,
+              "weight": 0.25,
+              "contribution": 15.702165570512522
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590759",
+              "nearestName": "Stadtfuchs Apotheke",
+              "distanceMetres": 811.1835064644491,
+              "distanceLimitMetres": 1000.0,
+              "score": 18.881649353555087,
+              "weight": 0.35,
+              "contribution": 6.60857727374428
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710824",
+              "nearestName": "Bücherei Breitnerhof",
+              "distanceMetres": 1617.8796492362446,
+              "distanceLimitMetres": 2000.0,
+              "score": 19.10601753818777,
+              "weight": 0.05,
+              "contribution": 0.9553008769093886
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        }
+      },
+      "sensitivity": {
+        "STUDENT": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 44.712431574764985,
+            "grade": 3
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 62.8621788164287,
+            "grade": 2
+          },
+          {
+            "scenario": "equal weights",
+            "score": 48.845562640440185,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 53.374019484543204,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 57.298962522964594,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 54.793393040380906,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 55.980840335443,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 56.18059346188095,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 54.71788977135837,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 57.346646002952674,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 53.704681387260784,
+            "grade": 3
+          }
+        ],
+        "SENIOR": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 46.009047570376566,
+            "grade": 3
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 63.642596839129105,
+            "grade": 2
+          },
+          {
+            "scenario": "equal weights",
+            "score": 48.845562640440185,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 53.49473302128729,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 58.8711501907595,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 56.032297992476224,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 56.67766602005469,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 59.192904034630175,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 53.91853426327456,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 56.747531345023276,
+            "grade": 3
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 56.002154833996826,
+            "grade": 3
+          }
+        ]
+      }
+    },
+    {
+      "input": "Wagramer Straße 22, 1220 Wien",
+      "responses": {
+        "STUDENT": {
+          "status": "OK",
+          "message": "Draft student estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Student",
+          "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593521452",
+            "label": "Wagramer Straße 22, 1220 Wien",
+            "longitude": 16.42176131,
+            "latitude": 48.234587
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:13.522987616Z",
+          "score": 75.49404196342712,
+          "grade": 2,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840518",
+              "nearestName": "PA Am Kaiserwasser",
+              "distanceMetres": 381.5283451352519,
+              "distanceLimitMetres": 1000.0,
+              "score": 61.84716548647481,
+              "weight": 0.25,
+              "contribution": 15.461791371618702
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.1684",
+              "nearestName": "Hotel NH Danube City",
+              "distanceMetres": 122.26446754276165,
+              "distanceLimitMetres": 800.0,
+              "score": 84.7169415571548,
+              "weight": 0.4,
+              "contribution": 33.88677662286192
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590773",
+              "nearestName": "Apotheke IZD-Tower",
+              "distanceMetres": 63.59482965355759,
+              "distanceLimitMetres": 1000.0,
+              "score": 93.64051703464425,
+              "weight": 0.1,
+              "contribution": 9.364051703464424
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710838",
+              "nearestName": "Bücherei Kaisermühlen",
+              "distanceMetres": 657.4862187614342,
+              "distanceLimitMetres": 2000.0,
+              "score": 67.12568906192828,
+              "weight": 0.25,
+              "contribution": 16.78142226548207
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        },
+        "SENIOR": {
+          "status": "OK",
+          "message": "Draft senior estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Senior",
+          "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593521452",
+            "label": "Wagramer Straße 22, 1220 Wien",
+            "longitude": 16.42176131,
+            "latitude": 48.234587
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:14.300529876Z",
+          "score": 78.95620872477679,
+          "grade": 2,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840518",
+              "nearestName": "PA Am Kaiserwasser",
+              "distanceMetres": 381.5283451352519,
+              "distanceLimitMetres": 1000.0,
+              "score": 61.84716548647481,
+              "weight": 0.35,
+              "contribution": 21.64650792026618
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.1684",
+              "nearestName": "Hotel NH Danube City",
+              "distanceMetres": 122.26446754276165,
+              "distanceLimitMetres": 800.0,
+              "score": 84.7169415571548,
+              "weight": 0.25,
+              "contribution": 21.1792353892887
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590773",
+              "nearestName": "Apotheke IZD-Tower",
+              "distanceMetres": 63.59482965355759,
+              "distanceLimitMetres": 1000.0,
+              "score": 93.64051703464425,
+              "weight": 0.35,
+              "contribution": 32.774180962125484
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710838",
+              "nearestName": "Bücherei Kaisermühlen",
+              "distanceMetres": 657.4862187614342,
+              "distanceLimitMetres": 2000.0,
+              "score": 67.12568906192828,
+              "weight": 0.05,
+              "contribution": 3.356284453096414
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        }
+      },
+      "sensitivity": {
+        "STUDENT": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 69.3675524542839,
+            "grade": 2
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 79.57836830285594,
+            "grade": 2
+          },
+          {
+            "scenario": "equal weights",
+            "score": 76.83257828505053,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 76.21229862010881,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 74.84419070261985,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 74.69205069440733,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 76.17721971111064,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 75.12370573748392,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 75.84985520011764,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 75.93448158982179,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 75.09554896811764,
+            "grade": 2
+          }
+        ],
+        "SENIOR": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 73.69526090597097,
+            "grade": 2
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 82.46350727064731,
+            "grade": 1
+          },
+          {
+            "scenario": "equal weights",
+            "score": 76.83257828505053,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 80.24398617282102,
+            "grade": 1
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 77.83692552227104,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 78.65301225991479,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 79.23052933584239,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 77.85093820682978,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 79.91686440859988,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 79.07570892339142,
+            "grade": 2
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 78.83907486672878,
+            "grade": 2
+          }
+        ]
+      }
+    },
+    {
+      "input": "Am Himmel 115, 1190 Wien",
+      "responses": {
+        "STUDENT": {
+          "status": "OK",
+          "message": "Draft student estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Student",
+          "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593534054",
+            "label": "Am Himmel 115, 1190 Wien",
+            "longitude": 16.3116188,
+            "latitude": 48.25957403
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:15.024814909Z",
+          "score": 20.928413843996324,
+          "grade": 4,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840133",
+              "nearestName": "PA Am Neustiftblick",
+              "distanceMetres": 1022.5654514220355,
+              "distanceLimitMetres": 1000.0,
+              "score": 0.0,
+              "weight": 0.25,
+              "contribution": 0.0
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.305",
+              "nearestName": "Gspöttgraben",
+              "distanceMetres": 381.4317231200735,
+              "distanceLimitMetres": 800.0,
+              "score": 52.32103460999081,
+              "weight": 0.4,
+              "contribution": 20.928413843996324
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590694",
+              "nearestName": "Apotheke \"Zur guten Hoffnung\"",
+              "distanceMetres": 1070.322292290045,
+              "distanceLimitMetres": 1000.0,
+              "score": 0.0,
+              "weight": 0.1,
+              "contribution": 0.0
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710831",
+              "nearestName": "Bücherei Billrothstraße",
+              "distanceMetres": 3668.1006332343654,
+              "distanceLimitMetres": 2000.0,
+              "score": 0.0,
+              "weight": 0.25,
+              "contribution": 0.0
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        },
+        "SENIOR": {
+          "status": "OK",
+          "message": "Draft senior estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+          "profile": "Senior",
+          "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+          "modelVersion": "profiles-draft-v1",
+          "location": {
+            "id": "ADRESSENOGD.593534054",
+            "label": "Am Himmel 115, 1190 Wien",
+            "longitude": 16.3116188,
+            "latitude": 48.25957403
+          },
+          "candidates": [],
+          "addressRetrievedAt": "2026-09-17T14:55:15.636818028Z",
+          "score": 13.080258652497703,
+          "grade": 5,
+          "factors": [
+            {
+              "category": "Parks",
+              "nearestId": "PARKINFOOGD.3840133",
+              "nearestName": "PA Am Neustiftblick",
+              "distanceMetres": 1022.5654514220355,
+              "distanceLimitMetres": 1000.0,
+              "score": 0.0,
+              "weight": 0.35,
+              "contribution": 0.0
+            },
+            {
+              "category": "Public transport stops",
+              "nearestId": "HALTESTELLEWLOGD.305",
+              "nearestName": "Gspöttgraben",
+              "distanceMetres": 381.4317231200735,
+              "distanceLimitMetres": 800.0,
+              "score": 52.32103460999081,
+              "weight": 0.25,
+              "contribution": 13.080258652497703
+            },
+            {
+              "category": "Pharmacies",
+              "nearestId": "APOTHEKEOGD.2590694",
+              "nearestName": "Apotheke \"Zur guten Hoffnung\"",
+              "distanceMetres": 1070.322292290045,
+              "distanceLimitMetres": 1000.0,
+              "score": 0.0,
+              "weight": 0.35,
+              "contribution": 0.0
+            },
+            {
+              "category": "Municipal libraries",
+              "nearestId": "BUECHEREIOGD.710831",
+              "nearestName": "Bücherei Billrothstraße",
+              "distanceMetres": 3668.1006332343654,
+              "distanceLimitMetres": 2000.0,
+              "score": 0.0,
+              "weight": 0.05,
+              "contribution": 0.0
+            }
+          ],
+          "sources": [
+            {
+              "category": "Vienna district boundaries",
+              "layer": "BEZIRKSGRENZEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+              "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+              "featureCount": 23,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+            },
+            {
+              "category": "Parks",
+              "layer": "PARKINFOOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+              "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+              "featureCount": 1054,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+            },
+            {
+              "category": "Public transport stops",
+              "layer": "HALTESTELLEWLOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+              "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+              "featureCount": 1807,
+              "unnamedFeatures": 7,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+            },
+            {
+              "category": "Pharmacies",
+              "layer": "APOTHEKEOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+              "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+              "featureCount": 345,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+            },
+            {
+              "category": "Municipal libraries",
+              "layer": "BUECHEREIOGD",
+              "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+              "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+              "license": "CC BY 4.0",
+              "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+              "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+              "featureCount": 37,
+              "unnamedFeatures": 0,
+              "state": "CACHED",
+              "message": "Validated cached snapshot.",
+              "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+            }
+          ]
+        }
+      },
+      "sensitivity": {
+        "STUDENT": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 16.160517304995405,
+            "grade": 5
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 28.88421219628749,
+            "grade": 4
+          },
+          {
+            "scenario": "equal weights",
+            "score": 13.080258652497703,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 22.029909309469815,
+            "grade": 4
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 19.93182270856793,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 18.19862073390985,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 23.253793159995915,
+            "grade": 4
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 21.355524330608496,
+            "grade": 4
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 20.51805278823169,
+            "grade": 4
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 22.029909309469815,
+            "grade": 4
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 19.93182270856793,
+            "grade": 5
+          }
+        ],
+        "SENIOR": [
+          {
+            "scenario": "distance limits -20%",
+            "score": 10.100323315622129,
+            "grade": 5
+          },
+          {
+            "scenario": "distance limits +20%",
+            "score": 24.024323018812403,
+            "grade": 4
+          },
+          {
+            "scenario": "equal weights",
+            "score": 13.080258652497703,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 1 weight x0.8",
+            "score": 14.064794249997531,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 1 weight x1.2",
+            "score": 12.224540796726824,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 2 weight x0.8",
+            "score": 11.014954654734908,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 2 weight x1.2",
+            "score": 14.948867031425944,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 3 weight x0.8",
+            "score": 14.064794249997531,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 3 weight x1.2",
+            "score": 12.224540796726824,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 4 weight x0.8",
+            "score": 13.212382477270408,
+            "grade": 5
+          },
+          {
+            "scenario": "factor 4 weight x1.2",
+            "score": 12.950751141086835,
+            "grade": 5
+          }
+        ]
+      }
+    }
+  ],
+  "inputChecks": [
+    {
+      "input": "",
+      "profile": "STUDENT",
+      "httpStatus": 400,
+      "response": {
+        "status": "INVALID_INPUT",
+        "message": "Enter a Vienna street and house number."
+      }
+    },
+    {
+      "input": "Hoher Markt 1 Top 2, 1010 Wien",
+      "profile": "STUDENT",
+      "httpStatus": 400,
+      "response": {
+        "status": "INVALID_INPUT",
+        "message": "Leave out apartment, Top, Tür or Stiege numbers. Enter the building address, for example Marchfeldstraße 10, 1200 Wien."
+      }
+    },
+    {
+      "input": "Hoher Markt 1, 1010 Wien",
+      "profile": "unknown",
+      "httpStatus": 400,
+      "response": {
+        "status": "INVALID_INPUT",
+        "message": "Choose Student or Senior as the profile."
+      }
+    },
+    {
+      "input": "WienScoreNichtVorhanden 9999, 1010 Wien",
+      "profile": "STUDENT",
+      "httpStatus": 200,
+      "response": {
+        "status": "NO_MATCH",
+        "message": "No exact address found in Vienna. Check the official street spelling (including ß and umlauts), house number and postcode. Leave out apartment or Top numbers. Spelling variants and addresses outside Vienna may not be found.",
+        "profile": "Student",
+        "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+        "modelVersion": "profiles-draft-v1",
+        "location": null,
+        "candidates": [],
+        "addressRetrievedAt": "2026-09-17T14:55:16.272993385Z",
+        "score": null,
+        "grade": null,
+        "factors": [],
+        "sources": []
+      }
+    },
+    {
+      "input": "Hoher Markt 1, 9999 Wien",
+      "profile": "SENIOR",
+      "httpStatus": 200,
+      "response": {
+        "status": "NO_MATCH",
+        "message": "No exact address found in Vienna. Check the official street spelling (including ß and umlauts), house number and postcode. Leave out apartment or Top numbers. Spelling variants and addresses outside Vienna may not be found.",
+        "profile": "Senior",
+        "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+        "modelVersion": "profiles-draft-v1",
+        "location": null,
+        "candidates": [],
+        "addressRetrievedAt": "2026-09-17T14:55:16.989386539Z",
+        "score": null,
+        "grade": null,
+        "factors": [],
+        "sources": []
+      }
+    },
+    {
+      "input": "Hauptplatz 1, 4020 Linz",
+      "profile": "STUDENT",
+      "httpStatus": 400,
+      "response": {
+        "status": "INVALID_INPUT",
+        "message": "Use street and house number, optionally followed by postcode and Wien or Vienna (for example Hoher Markt 1, 1010 Wien)."
+      }
+    },
+    {
+      "input": "Marchfeldstrasse 10, 1200 Wien",
+      "profile": "STUDENT",
+      "httpStatus": 200,
+      "response": {
+        "status": "NO_MATCH",
+        "message": "No exact address found in Vienna. Check the official street spelling (including ß and umlauts), house number and postcode. Leave out apartment or Top numbers. Spelling variants and addresses outside Vienna may not be found.",
+        "profile": "Student",
+        "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+        "modelVersion": "profiles-draft-v1",
+        "location": null,
+        "candidates": [],
+        "addressRetrievedAt": "2026-09-17T14:55:17.796132118Z",
+        "score": null,
+        "grade": null,
+        "factors": [],
+        "sources": []
+      }
+    },
+    {
+      "input": "Hoher Markt 1, 1010 Vienna",
+      "profile": "SENIOR",
+      "httpStatus": 200,
+      "response": {
+        "status": "OK",
+        "message": "Draft senior estimate using straight-line distances. Grade 1 is best; 5 is worst.",
+        "profile": "Senior",
+        "profileDescription": "This draft gives more weight to parks and pharmacies as proxies for nearby outdoor space and pharmacy access. It does not assess mobility needs or medical care.",
+        "modelVersion": "profiles-draft-v1",
+        "location": {
+          "id": "ADRESSENOGD.593516983",
+          "label": "Hoher Markt 1, 1010 Wien",
+          "longitude": 16.37307549,
+          "latitude": 48.21053772
+        },
+        "candidates": [],
+        "addressRetrievedAt": "2026-09-17T14:55:18.584763969Z",
+        "score": 85.58783861651217,
+        "grade": 1,
+        "factors": [
+          {
+            "category": "Parks",
+            "nearestId": "PARKINFOOGD.3840877",
+            "nearestName": "GA Morzinplatz",
+            "distanceMetres": 256.8554655612805,
+            "distanceLimitMetres": 1000.0,
+            "score": 74.31445344387195,
+            "weight": 0.35,
+            "contribution": 26.01005870535518
+          },
+          {
+            "category": "Public transport stops",
+            "nearestId": "HALTESTELLEWLOGD.1073",
+            "nearestName": "Rotenturmstraße",
+            "distanceMetres": 103.23157063014247,
+            "distanceLimitMetres": 800.0,
+            "score": 87.09605367123218,
+            "weight": 0.25,
+            "contribution": 21.774013417808046
+          },
+          {
+            "category": "Pharmacies",
+            "nearestId": "APOTHEKEOGD.2590455",
+            "nearestName": "Apotheke \"Zum rothen Krebs\"",
+            "distanceMetres": 2.4458650738646854,
+            "distanceLimitMetres": 1000.0,
+            "score": 99.75541349261353,
+            "weight": 0.35,
+            "contribution": 34.914394722414734
+          },
+          {
+            "category": "Municipal libraries",
+            "nearestId": "BUECHEREIOGD.710813",
+            "nearestName": "Bücherei Zirkusgasse",
+            "distanceMetres": 844.2512916263141,
+            "distanceLimitMetres": 2000.0,
+            "score": 57.7874354186843,
+            "weight": 0.05,
+            "contribution": 2.889371770934215
+          }
+        ],
+        "sources": [
+          {
+            "category": "Vienna district boundaries",
+            "layer": "BEZIRKSGRENZEOGD",
+            "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BEZIRKSGRENZEOGD&maxFeatures=100",
+            "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+            "license": "CC BY 4.0",
+            "retrievedAt": "2026-09-17T07:28:54.271251010Z",
+            "sha256": "18994b6d9f234748f7dfa8311860ef7d9aa683efdb19fa144953456a6eaee723",
+            "featureCount": 23,
+            "unnamedFeatures": 0,
+            "state": "CACHED",
+            "message": "Validated cached snapshot.",
+            "limitation": "The resolved point must be covered by one of Vienna's 23 district polygons, including polygon edges."
+          },
+          {
+            "category": "Parks",
+            "layer": "PARKINFOOGD",
+            "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:PARKINFOOGD&maxFeatures=5000",
+            "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+            "license": "CC BY 4.0",
+            "retrievedAt": "2026-09-17T07:28:54.653696157Z",
+            "sha256": "41c75fc1e4a04da844635f4719f00c75dee1f3cb55d93d2fe35b536eca988f66",
+            "featureCount": 1054,
+            "unnamedFeatures": 0,
+            "state": "CACHED",
+            "message": "Validated cached snapshot.",
+            "limitation": "Mapped park points, not entrances or park boundaries; access and opening hours are not assessed."
+          },
+          {
+            "category": "Public transport stops",
+            "layer": "HALTESTELLEWLOGD",
+            "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:HALTESTELLEWLOGD&maxFeatures=10000",
+            "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+            "license": "CC BY 4.0",
+            "retrievedAt": "2026-09-17T07:28:55.057428245Z",
+            "sha256": "796449fca7878d8db1c8292d6355d2e0d69518242f8ecdb1000d2fdb98a05385",
+            "featureCount": 1807,
+            "unnamedFeatures": 7,
+            "state": "CACHED",
+            "message": "Validated cached snapshot.",
+            "limitation": "Wiener Linien stop proximity only; no service frequency, reliability or step-free access assessment."
+          },
+          {
+            "category": "Pharmacies",
+            "layer": "APOTHEKEOGD",
+            "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:APOTHEKEOGD&maxFeatures=2000",
+            "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+            "license": "CC BY 4.0",
+            "retrievedAt": "2026-09-17T07:28:55.268998010Z",
+            "sha256": "c649d56acc223416c8b9538f21f61bcce6daa4ddedd9e0722e77848274f5e0bf",
+            "featureCount": 345,
+            "unnamedFeatures": 0,
+            "state": "CACHED",
+            "message": "Validated cached snapshot.",
+            "limitation": "Pharmacy locations only; no opening hours or out-of-hours availability assessment."
+          },
+          {
+            "category": "Municipal libraries",
+            "layer": "BUECHEREIOGD",
+            "url": "https://data.wien.gv.at/daten/geo?service=WFS&version=1.1.0&request=GetFeature&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:BUECHEREIOGD&maxFeatures=1000",
+            "attribution": "Datenquelle: Stadt Wien – https://data.wien.gv.at",
+            "license": "CC BY 4.0",
+            "retrievedAt": "2026-09-17T07:28:55.399411830Z",
+            "sha256": "9ec267d3d113a59023c24f99a27b6d40529ed5da367ef321db12de4fb930f76f",
+            "featureCount": 37,
+            "unnamedFeatures": 0,
+            "state": "CACHED",
+            "message": "Validated cached snapshot.",
+            "limitation": "Municipal library network only; excludes university and other libraries, opening hours and study-space capacity."
+          }
+        ]
+      }
+    },
+    {
+      "input": "Karlsplatz 13, 1040 Wien",
+      "profile": "STUDENT",
+      "httpStatus": 200,
+      "response": {
+        "status": "NO_MATCH",
+        "message": "No exact address found in Vienna. Check the official street spelling (including ß and umlauts), house number and postcode. Leave out apartment or Top numbers. Spelling variants and addresses outside Vienna may not be found.",
+        "profile": "Student",
+        "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+        "modelVersion": "profiles-draft-v1",
+        "location": null,
+        "candidates": [],
+        "addressRetrievedAt": "2026-09-17T14:55:19.283909178Z",
+        "score": null,
+        "grade": null,
+        "factors": [],
+        "sources": []
+      }
+    },
+    {
+      "input": "Wagramer Straße 5, 1220 Wien",
+      "profile": "STUDENT",
+      "httpStatus": 200,
+      "response": {
+        "status": "NO_MATCH",
+        "message": "No exact address found in Vienna. Check the official street spelling (including ß and umlauts), house number and postcode. Leave out apartment or Top numbers. Spelling variants and addresses outside Vienna may not be found.",
+        "profile": "Student",
+        "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+        "modelVersion": "profiles-draft-v1",
+        "location": null,
+        "candidates": [],
+        "addressRetrievedAt": "2026-09-17T14:55:20.074708015Z",
+        "score": null,
+        "grade": null,
+        "factors": [],
+        "sources": []
+      }
+    },
+    {
+      "input": "Am Himmel 1, 1190 Wien",
+      "profile": "STUDENT",
+      "httpStatus": 200,
+      "response": {
+        "status": "NO_MATCH",
+        "message": "No exact address found in Vienna. Check the official street spelling (including ß and umlauts), house number and postcode. Leave out apartment or Top numbers. Spelling variants and addresses outside Vienna may not be found.",
+        "profile": "Student",
+        "profileDescription": "This draft gives more weight to public transport and municipal libraries as proxies for getting around and access to study resources.",
+        "modelVersion": "profiles-draft-v1",
+        "location": null,
+        "candidates": [],
+        "addressRetrievedAt": "2026-09-17T14:55:20.802602333Z",
+        "score": null,
+        "grade": null,
+        "factors": [],
+        "sources": []
+      }
+    }
+  ]
+}

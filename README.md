@@ -50,8 +50,9 @@ nor a previously built JAR is needed. To check the running workflow from PowerSh
 ./scripts/smoke-test.ps1
 ```
 
-This is a runnable development baseline. The final exported Docker artifact,
-clean-machine handover, archive-size check and submission package remain pending.
+See [Docker handover](docs/HANDOVER.md) for creating a loadable image, matching
+source archive and integrity manifest. Final combined submission packaging and
+independent-machine handover remain separate acceptance steps.
 
 ## Local development
 
@@ -113,6 +114,8 @@ See [acceptance evidence](docs/ACCEPTANCE.md) for actual results and limits.
 - [Captured per-dataset license/update metadata](docs/source-metadata.json)
 - [API contract and screen behavior](docs/API.md)
 - [Implementation/verification record](docs/ACCEPTANCE.md)
+- [Research, contrasting locations and sensitivity checks](docs/VALIDATION.md)
+- [Export and handover instructions](docs/HANDOVER.md)
 
 Model rules live in `ScoringModel.java`: distance limits 1000/800/1000/2000 m,
 student weights 25/40/10/25%, senior weights 35/25/35/5%, linear distance scores and grade cutoffs
@@ -127,6 +130,9 @@ produce helpful feedback, not a guessed building. For example, use
 `Marchfeldstraße 10, 1200 Wien`, including the correct street spelling.
 No fuzzy matching or autocomplete is implemented. No-match, ambiguity,
 invalid input, out-of-boundary coordinates and unusable data give explicit outcomes.
+Some real buildings have annotated labels in the source and are unsupported:
+`Karlsplatz 13, 1040 Wien` is one observed example. See the validation report
+for successful examples and retained no-match cases.
 The UI never silently picks an ambiguous result or keeps a result for edited input.
 The chosen profile is sent with each request; controls are disabled during the
 calculation. A request that stalls for two minutes ends with a retry message.
