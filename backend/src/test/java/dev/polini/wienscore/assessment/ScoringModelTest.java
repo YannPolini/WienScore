@@ -11,18 +11,20 @@ class ScoringModelTest {
     @CsvSource({"0,5", "19.99,5", "20,4", "39.99,4", "40,3", "59.99,3", "60,2", "79.99,2", "80,1", "100,1"})
     void gradeBoundaries(double score, int grade) { assertEquals(grade, ScoringModel.grade(score)); }
 
-    @Test void categoryBoundariesForEveryDraftThreshold() {
+    @Test void continuousScoresAtEveryBenchmark() {
         for (var profile : ScoringModel.Profile.values()) for (var rule : ScoringModel.rules(profile)) {
-            double d = rule.distanceLimitMetres();
+            double d = rule.targetMetres();
             assertEquals(100, ScoringModel.categoryScore(0, d));
-            assertEquals(50, ScoringModel.categoryScore(d / 2, d));
-            assertEquals(0, ScoringModel.categoryScore(d, d));
-            assertEquals(0, ScoringModel.categoryScore(d * 2, d));
+            assertEquals(90, ScoringModel.categoryScore(d / 2, d));
+            assertEquals(80, ScoringModel.categoryScore(d, d));
+            assertEquals(40, ScoringModel.categoryScore(d * 2, d));
+            assertEquals(0, ScoringModel.categoryScore(d * 3, d));
+            assertEquals(0, ScoringModel.categoryScore(d * 4, d));
         }
     }
 
     @ParameterizedTest
-    @CsvSource({"STUDENT,70,2", "SENIOR,52.5,3"})
+    @CsvSource({"STUDENT,62.5,2", "SENIOR,50,3"})
     void profileWeightsMatchDocumentedControlledExample(ScoringModel.Profile profile, double expected, int grade) {
         double[] categoryScores = {100, 50, 0, 100};
         var rules = ScoringModel.rules(profile);
@@ -33,6 +35,21 @@ class ScoringModelTest {
         assertEquals(grade, ScoringModel.grade(result));
         assertEquals(4, rules.stream().map(ScoringModel.Rule::dataset).distinct().count());
         assertTrue(rules.stream().allMatch(rule -> rule.weight() > 0));
+    }
+
+    @Test void withinBenchmarkDistancesRemainDistinctAndContinuous() {
+        assertEquals(99.2, ScoringModel.categoryScore(20, 500), 1e-10);
+        assertEquals(84, ScoringModel.categoryScore(400, 500), 1e-10);
+        for (double cutoff : new double[]{2, 3, 4}) {
+            double previous = 100;
+            for (int d = 1; d < 500 * cutoff; d++) {
+                double score = ScoringModel.categoryScore(d, 500, cutoff);
+                assertTrue(score < previous, "Every additional metre before the cutoff must reduce the score");
+                previous = score;
+            }
+            assertEquals(80, ScoringModel.categoryScore(500 - 1e-6, 500, cutoff), 1e-6);
+            assertEquals(80, ScoringModel.categoryScore(500 + 1e-6, 500, cutoff), 1e-6);
+        }
     }
 
     @Test void invalidMeasurementsCannotBecomeFavourableScores() {

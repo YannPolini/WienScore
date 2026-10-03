@@ -1,5 +1,7 @@
 # Sprint 3 model and address validation
 
+Historical v1 record. For the current implementation, see [v2 verification](MODEL_V2_VALIDATION.md).
+
 Checked 17 September 2026 against application revision `21b69bc`, model
 `profiles-draft-v1`. This is a small purposive sample, not a representative survey
 or a validation of quality of life. No parameters were changed to fit it.

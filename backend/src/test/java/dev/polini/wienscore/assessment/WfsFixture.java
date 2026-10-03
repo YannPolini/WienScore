@@ -65,14 +65,29 @@ final class WfsFixture implements AutoCloseable {
         }
         return collection(23, features);
     }
+    static String green(String id, double area, double west) {
+        return """
+                {"type":"Feature","id":"%s","properties":{"T_LANG":"Near feature","FLAECHE":%s},
+                 "geometry":{"type":"Polygon","coordinates":[[[%s,48.211],[%s,48.211],[%s,48.216],[%s,48.216],[%s,48.211]]]}}
+                """.formatted(id, area, west, west + .006, west + .006, west, west);
+    }
     static String standard(Map<String, String> query) {
         String layer = query.get("typeName").replace("ogdwien:", "");
         if (layer.equals("ADRESSENOGD")) return collection(1, address(16.37307549, 48.21053772));
         if (layer.equals("BEZIRKSGRENZEOGD")) return boundary();
         Dataset dataset = Arrays.stream(Dataset.values()).filter(d -> d.layer.equals(layer)).findFirst().orElseThrow();
+        if (dataset == Dataset.PARKS) return collection(2, green("green.far", 120000, 16.45), green("green.near", 120000, 16.374));
+        if (dataset == Dataset.TRANSIT) return collection(3,
+                point("stop.night", "{\"HTXT\":\"Night only\",\"LTYP\":10}", 16.37307549, 48.21053772),
+                point("stop.bus", "{\"HTXT\":\"Near feature\",\"LTYP\":2}", 16.374, 48.211),
+                point("stop.rail", "{\"HTXT\":\"Near feature\",\"LTYP\":4}", 16.374, 48.211));
+        if (dataset == Dataset.DOCTORS) return collection(3,
+                point("doctor.surgeon", "{\"NAME\":\"Surgeon\",\"FACH\":\"Allgemeine Chirurgie u. Viszeralchirurgie\"}", 16.37307549, 48.21053772),
+                point("doctor.near", "{\"NAME\":\"Near feature\",\"FACH\":\"Allgemeinmedizin\"}", 16.374, 48.211),
+                point("doctor.far", "{\"NAME\":\"Far feature\",\"FACH\":\"Allgemein- und Familienmedizin\"}", 16.4, 48.25));
         return collection(2,
                 point(layer + ".far", "{\"" + dataset.nameField + "\":\"Far feature\"}", 16.4, 48.25),
-                point(layer + ".near", "{\"" + dataset.nameField + "\":\"Near feature\"}", 16.374, 48.211));
+                point(layer + ".near", "{\"" + dataset.nameField + "\":\"Near feature\"}", 16.374, dataset == Dataset.LIBRARIES ? 48.224 : 48.211));
     }
     @Override public void close() { server.stop(0); executor.shutdownNow(); }
 }

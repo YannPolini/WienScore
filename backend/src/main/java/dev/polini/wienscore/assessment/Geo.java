@@ -5,6 +5,16 @@ import tools.jackson.databind.JsonNode;
 
 final class Geo {
     private static final GeometryFactory FACTORY = new GeometryFactory(new PrecisionModel(), 4326);
+    // Local equirectangular metric approximation centred on Vienna; never use degrees as metres.
+    static Geometry metricGeometry(Geometry geometry) {
+        double y = 6_371_000 * Math.PI / 180;
+        double x = y * Math.cos(Math.toRadians(48.2));
+        return new org.locationtech.jts.geom.util.AffineTransformation(x, 0, -16.37 * x, 0, y, -48.2 * y).transform(geometry);
+    }
+
+    static Geometry metricPoint(Location location) {
+        return metricGeometry(FACTORY.createPoint(new Coordinate(location.longitude(), location.latitude())));
+    }
     record Location(double longitude, double latitude) {
         Location {
             if (!Double.isFinite(longitude) || !Double.isFinite(latitude)

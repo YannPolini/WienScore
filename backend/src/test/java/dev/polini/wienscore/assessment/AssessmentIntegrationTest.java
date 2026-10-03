@@ -42,9 +42,11 @@ class AssessmentIntegrationTest {
                 .andReturn().getResponse().getContentAsString());
         double contributions = 0;
         for (var factor : first.path("factors")) {
-            assertEquals("Near feature", factor.path("nearestName").asText());
-            assertTrue(factor.path("distanceMetres").asDouble() > 70);
-            assertTrue(factor.path("distanceMetres").asDouble() < 100);
+            for (var measure : factor.path("measures")) {
+                assertEquals("Near feature", measure.path("nearestName").asText());
+                assertTrue(measure.path("distanceMetres").asDouble() > 70);
+                assertTrue(measure.path("distanceMetres").asDouble() < 1600);
+            }
             contributions += factor.path("contribution").asDouble();
         }
         assertEquals(contributions, first.path("score").asDouble(), 1e-10);
@@ -52,7 +54,7 @@ class AssessmentIntegrationTest {
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
         assertEquals(first.path("score"), second.path("score"));
         assertEquals(first.path("factors"), second.path("factors"));
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < first.path("sources").size(); i++) {
             assertEquals(first.path("sources").get(i).path("sha256"), second.path("sources").get(i).path("sha256"));
         }
     }
@@ -72,15 +74,14 @@ class AssessmentIntegrationTest {
                 .content("{\"address\":\"Hoher Markt 1\",\"profile\":\" senior \"}"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.profile").value("Senior"))
-                .andExpect(jsonPath("$.modelVersion").value("profiles-draft-v1"))
+                .andExpect(jsonPath("$.modelVersion").value("neighbourhood-proximity-v3"))
                 .andExpect(jsonPath("$.profileDescription").isNotEmpty())
                 .andReturn().getResponse().getContentAsString());
-        double[] weights = {.35, .25, .35, .05};
+        double[] weights = {.3125, .25, .375, .0625};
         double expected = 0;
         for (int i = 0; i < weights.length; i++) {
             var factor = senior.path("factors").get(i);
-            assertEquals(student.path("factors").get(i).path("distanceMetres"), factor.path("distanceMetres"));
-            assertEquals(student.path("factors").get(i).path("nearestId"), factor.path("nearestId"));
+            assertEquals(student.path("factors").get(i).path("measures"), factor.path("measures"));
             assertEquals(weights[i], factor.path("weight").asDouble());
             expected += factor.path("score").asDouble() * weights[i];
         }
@@ -90,7 +91,7 @@ class AssessmentIntegrationTest {
                 .content("{\"address\":\"Hoher Markt 1\",\"profile\":\"SENIOR\"}"))
                 .andReturn().getResponse().getContentAsString());
         assertEquals(senior.path("score"), repeat.path("score"));
-        for (int i = 0; i < 5; i++) assertEquals(student.path("sources").get(i).path("sha256"), senior.path("sources").get(i).path("sha256"));
+        for (int i = 0; i < student.path("sources").size(); i++) assertEquals(student.path("sources").get(i).path("sha256"), senior.path("sources").get(i).path("sha256"));
     }
 
     @Test void invalidProfilesNeverSilentlyBecomeStudent() throws Exception {
@@ -130,5 +131,25 @@ class AssessmentIntegrationTest {
                 .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("AMBIGUOUS"))
                 .andExpect(jsonPath("$.location").isEmpty()).andExpect(jsonPath("$.grade").isEmpty())
                 .andExpect(jsonPath("$.candidates.length()").value(1));
+    }
+
+    @Test void selectedOfficialIdUsesServerCoordinatesAndStillChecksBoundary() throws Exception {
+        for (double longitude : new double[]{16.37, 15}) {
+            SOURCE.handler = q -> new WfsFixture.Response(200, q.get("typeName").endsWith("ADRESSENOGD")
+                    ? WfsFixture.collection(1, WfsFixture.point("ADRESSENOGD.123",
+                      "{\"NAME\":\"Karlsplatz 13 Technische Universität Wien\",\"PLZ\":\"1040\"}", longitude, 48.21))
+                    : WfsFixture.standard(q), 0);
+            mvc.perform(post("/api/addresses/suggest").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"address\":\"Karlsplatz 13\"}"))
+                    .andExpect(status().isOk()).andExpect(jsonPath("$.matches[0].id").value("ADRESSENOGD.123"));
+            mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"address\":\"ignored client label\",\"addressId\":\"ADRESSENOGD.123\",\"profile\":\"SENIOR\",\"latitude\":48.21,\"longitude\":16.37}"))
+                    .andExpect(status().isOk()).andExpect(jsonPath("$.status").value(longitude == 15 ? "OUTSIDE_VIENNA" : "OK"))
+                    .andExpect(jsonPath("$.location.label").value("Karlsplatz 13 Technische Universität Wien, 1040 Wien"))
+                    .andExpect(jsonPath("$.profile").value("Senior"));
+        }
+        mvc.perform(post("/api/assessments").contentType(MediaType.APPLICATION_JSON)
+                .content("{\"addressId\":\"ADRESSENOGD.1,OTHER.2\"}"))
+                .andExpect(status().isBadRequest());
     }
 }

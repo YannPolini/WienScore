@@ -1,122 +1,174 @@
-# Sources and provisional profile model
+# Sources and neighbourhood proximity model
 
-WienScore is a student project estimate of access to selected amenities. It is
-not an official City of Vienna rating and does not measure overall quality of life.
-The factors, weights and distance limits below are engineering starting assumptions
-from the project dataset check dated 14 September 2026. They are **not validated
-research findings**. Sprint 3's [research and validation](VALIDATION.md) records
-factor rationale, six contrasting addresses and sensitivity analysis. Numeric
-calibration against independent outcomes remains open; the model stays provisional.
+Current model: **`neighbourhood-proximity-v3`**, implemented 23 September 2026.
+WienScore estimates proximity to selected neighbourhood amenities. It is not an
+individual wellbeing assessment, official Vienna rating or empirically validated
+quality-of-life index. Planning evidence informs some targets; preferences and
+scoring transformations remain explicit design choices.
+
+## Measurements and evidence
+
+All distances are straight-line proxies, never walking routes or travel times.
+
+| Domain | Measurements and distance benchmarks | Aggregation | Basis and limitations |
+|---|---|---|---|
+| Public green space | Any mapped area within 250 m; ≥1 ha within 500 m; ≥3 ha within 1,000 m; ≥10 ha within 1,500 m | Mean of four scores | Adapted from Vienna planning benchmarks; distance to polygon boundary, not a validated entrance. Uses each record's FLAECHE, not tree canopy or a raster pixel count. |
+| Public transport | Bus/tram within 500 m; U-Bahn/regional rail within 1,000 m | Better of the two scores | UN-Habitat distinguishes low/high-capacity transport using walking-network distance. Our straight-line substitution is explicitly a proxy, not an SDG-compliant calculation. |
+| Primary healthcare | Pharmacy within 500 m; general practitioner within 1,000 m | Equal mean | Project hypotheses about useful proximity, not universal WHO standards. No insurance, opening-hours or appointment-capacity assessment. |
+| Municipal libraries | Within 1,000 m | Single score | Project hypothesis for local learning access. Does not cover university libraries or all study resources. |
+
+Primary references, consulted 23 September 2026:
+
+- [Vienna's current green/open-space planning benchmarks](https://www.wien.gv.at/spezial/wien-plan/stadtentwicklung-steuern-und-gestalten/grun-und-freiraum/): local distance and size scales. These are planning benchmarks, not a validated personal QoL formula.
+- [City green-space survey methodology](https://www.wien.gv.at/umwelt/umweltgut-oeffentlich): public, free access; 2013–2015 survey; excludes residential grounds and cemeteries. Some landscapes are represented by path corridors. A fresh download does not make these observations current.
+- [UN-Habitat indicator 11.2.1 metadata](https://unhabitat.org/sites/default/files/2020/11/metadata_on_sdg_indicator_11.2.1_2020_1.pdf): 500/1,000 m walking-network access benchmarks.
+- [WHO age-friendly environments handbook](https://www.who.int/europe/publications/i/item/9789289056076): motivates outdoor-space, transport and healthcare dimensions; does not establish profile weights.
+- [OECD/JRC composite-indicator handbook](https://www.oecd.org/en/publications/handbook-on-constructing-composite-indicators-methodology-and-user-guide_9789264043466-en.html): transparent normalization, weighting and sensitivity analysis. It does not validate this application.
+
+## Formula and profiles
+
+For measured distance d and target a:
+
+```text
+A(d, a) = 100 − 20 × d / a              when 0 ≤ d ≤ a
+          80 × (3a − d) / (2a)           when a < d < 3a
+          0                              when d ≥ 3a
+```
+
+The v2 plateau assigned identical 100-point scores to all distances inside each
+benchmark. This erased proximity differences and made profile weights irrelevant
+when every domain saturated. V3 removes that plateau without moving the distance
+benchmarks or changing weights to fit sample addresses.
+
+The score now continuously measures proximity convenience: 100 at zero distance,
+80 at the benchmark, and zero at 3×. Mapping the benchmark to 80 (the existing
+highest-grade boundary) is an explicit engineering convention, not a scientifically
+established wellbeing effect. The breakpoint is continuous. The separate
+`withinTarget` flag reports benchmark attainment even when the score is below 100.
+A closer point yields more proximity credit, not a claim of extra health benefits.
+Linear interpolation, the 80-point anchor and the 3× cutoff remain design assumptions. No qualifying feature in an otherwise complete dataset earns zero
+for that measurement, with null distance/feature ID and an explicit state. A
+failed, malformed or incomplete dataset is a different case and withholds the
+overall grade. Unmet green-size targets remain in the four-measure average.
+
+| Domain | Student | Senior |
+|---|---:|---:|
+| Green space | 31.25% | 31.25% |
+| Transport | 37.5% | 25% |
+| Healthcare | 18.75% | 37.5% |
+| Libraries | 12.5% | 6.25% |
+
+These fixed four-domain presets preserve the ratios of the research proposal's
+non-noise weights: Student 25/30/15/10 and Senior 25/20/30/5, each divided by 80.
+Noise is outside this separately named version. This is a declared model design,
+not runtime redistribution of missing data. Weights represent illustrative
+preferences, not effect sizes from research or surveyed demographic preferences.
+
+Domain contribution = domain score × profile weight. Overall score = sum of all
+four contributions. Grade thresholds remain ≥80 → 1, ≥60 → 2, ≥40 → 3, ≥20 → 4,
+otherwise 5. These display conventions are not externally validated. Grade and
+aggregation use unrounded values; UI rounding can slightly change displayed sums.
+Controlled scores (100, 50, 0, 100) give Student 62.5 / grade 2 and Senior 50 /
+grade 3. Identical measurements can legitimately produce identical grades or
+scores if their weighted measurements coincide; distinct profiles are not forced
+to disagree. Full unrounded 100 requires zero distance in every contributing
+measurement (or a zero-distance winning transport mode), not merely meeting
+benchmarks. Rounded display values can still coincide. Grade 1 may legitimately
+be common for well-served areas; this is not a percentile ranking.
+
+Every successful response includes cutoff sensitivity: recompute with zero at
+2a and 4a, keeping the same 100-to-80 segment through a, domains, weights and snapshots.
+The UI shows both scores and grades. This tests one modelling assumption; it is
+not a confidence interval, empirical validation or a complete uncertainty analysis.
+Weight/equal-domain comparisons are recorded separately in the validation evidence.
 
 ## Source manifest
 
-**Datenquelle: Stadt Wien – https://data.wien.gv.at**. Each of these datasets'
-JSON distributions declares **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**
-in the Austrian catalog, checked on 17 September 2026. The exact metadata URLs,
-retrieval times, license URLs and update-frequency labels are preserved in
-[source-metadata.json](source-metadata.json). This is per-dataset evidence,
-rather than relying on the WFS capabilities' older service-wide CC BY 3.0 string.
-See also the [City's data terms](https://digitales.wien.gv.at/ogd-nutzungsbedingungen/).
+**Datenquelle: Stadt Wien – https://data.wien.gv.at**; selected distributions are
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Per-dataset catalog
+responses, licenses, retrieval times and update labels are recorded in
+[source-metadata.json](source-metadata.json). New sources were checked on
+23 September 2026; historical sources retain their original check dates.
 
-| Dataset and catalog | WFS layer | Role / name field | Catalog update frequency |
-|---|---|---|---|
-| [Adressen Standorte Wien](https://www.data.gv.at/datasets/1d5c2411-9719-4c8f-b99d-57a5f4a4ae41) | ADRESSENOGD | Exact address lookup; NAME, PLZ | Continuous |
-| [Parkanlagen Standorte Wien](https://www.data.gv.at/datasets/22add642-d849-48ff-9913-8c7ba2d99b46) | PARKINFOOGD | Nearest park point; ANL_NAME | Continuous |
-| [Haltestellen Standorte Wien](https://www.data.gv.at/datasets/21fca925-12ac-4215-ba1a-a9c73cb3b082) | HALTESTELLEWLOGD | Nearest Wiener Linien stop; BEZEICHNUNG | Continuous |
-| [Apotheken Standorte Wien](https://www.data.gv.at/datasets/cf00fe06-e4b2-4319-af00-85230e7b2f1b) | APOTHEKEOGD | Nearest pharmacy; BEZEICHNUNG | Continuous |
-| [Büchereien Standorte Wien](https://www.data.gv.at/datasets/2adc5a86-faa3-4b63-acff-a66128b811b7) | BUECHEREIOGD | Nearest municipal library; NAME | Continuous |
-| [Bezirksgrenzen Wien](https://www.data.gv.at/datasets/2ee6b8bf-6292-413c-bb8b-bd22dbb2ad4b) | BEZIRKSGRENZEOGD | Check resolved location; BEZNR, polygon geometry | Irregular |
+| Catalog | WFS layer | Role / required properties | Download cap |
+|---|---|---|---:|
+| [Addresses](https://www.data.gv.at/datasets/1d5c2411-9719-4c8f-b99d-57a5f4a4ae41) | ADRESSENOGD | NAME, PLZ, official feature ID; live lookup/suggestions | 8 suggestions / 10 exact candidates |
+| [Public green space](https://www.data.gv.at/datasets/d0145df8-7f6d-46e1-9bc6-ee7897054104) | OEFFGRUENFLOGD | T_LANG, FLAECHE, valid Polygon/MultiPolygon | 5,000 |
+| [Transport network stops](https://www.data.gv.at/datasets/f1f6f15d-2faa-4b62-b78b-80599dd1c66e) | OEFFHALTESTOGD | HTXT, LTYP, point | 20,000 |
+| [Doctors](https://www.data.gv.at/datasets/fdcaabe5-0efd-4701-8fd9-49935c0d9cff) | ARZTOGD | NAME, FACH, point | 15,000 |
+| [Pharmacies](https://www.data.gv.at/datasets/cf00fe06-e4b2-4319-af00-85230e7b2f1b) | APOTHEKEOGD | BEZEICHNUNG, point | 2,000 |
+| [Libraries](https://www.data.gv.at/datasets/2adc5a86-faa3-4b63-acff-a66128b811b7) | BUECHEREIOGD | NAME, point | 1,000 |
+| [District boundaries](https://www.data.gv.at/datasets/2ee6b8bf-6292-413c-bb8b-bd22dbb2ad4b) | BEZIRKSGRENZEOGD | NAMEK, BEZNR, polygon | 100 |
 
-Catalog modification dates and frequency labels do not establish when every
-feature was last observed. Runtime retrieval timestamps are recorded separately.
+WFS 1.1.0 requests explicitly select EPSG:4326 and JSON, at
+`https://data.wien.gv.at/daten/geo`. Coordinates are longitude then latitude.
+The complete raw count must match the response and fit the cap; caps are not
+pagination. IDs must be unique. Unknown transport codes, missing specialties,
+invalid eligible geometry or invalid green-space sizes reject the snapshot.
+Names may be blank; valid features remain with their ID and a disclosed unnamed count.
 
-Requests use the [official WFS](https://digitales.wien.gv.at/open-data/geowebservices/)
-at `https://data.wien.gv.at/daten/geo`, version 1.1.0, `GetFeature`, JSON output and
-explicit `srsName=EPSG:4326`. Returned coordinates are interpreted as longitude,
-latitude. Download caps: parks 5,000, stops 10,000, pharmacies 2,000, libraries 1,000,
-districts 100. A cap is not pagination: a larger advertised total fails closed
-until the implementation is revised. No live source is contacted in automated tests.
+GP selection uses exact FACH values `Allgemeinmedizin` and
+`Allgemein- und Familienmedizin` after trimming. A substring search for
+`Allgemein` would wrongly include general surgery and is deliberately not used.
+The audit found 2,005 eligible records among 7,592 physician records. Several
+records can share coordinates; nearest-distance scoring does not give extra
+credit for duplicate practices or imply a count of independent providers.
 
-## Model profiles-draft-v1
+Transport follows the catalog codebook: 1 tram, 2 bus, 3 regional bus, 4 U-Bahn,
+5 S-/regional rail, 6 Badner Bahn. Codes 1/2/3/6 use the 500 m proxy, 4/5 the
+1,000 m proxy; 9–13 are excluded from daytime scoring. The live data included
+WLB-named rows under code 9 despite the catalog describing 9 as Astax. These are
+excluded rather than silently reclassified by line name. This source inconsistency
+limits completeness for Badner Bahn and should be resolved with the publisher.
+No arbitrary name parsing overrides the authoritative field definitions.
 
-| Factor | Student weight | Senior weight | Zero-score distance D | Provisional rationale |
-|---|---:|---:|---:|---|
-| Parks | 25% | 35% | 1,000 m | Access to outdoor recreation |
-| Public transport stops | 40% | 25% | 800 m | Access to local public transport |
-| Pharmacies | 10% | 35% | 1,000 m | Access to an everyday health service |
-| Municipal libraries | 25% | 5% | 2,000 m | Access to library services |
+Point distances use haversine with radius 6,371,000 m. Green polygons are projected
+once into a local equirectangular metric plane centred at 16.37°E, 48.2°N. Distance
+to their full filled geometry respects holes and is zero inside/on the polygon.
+This is an approximation suitable for Vienna-scale proximity, not survey accuracy.
+Ties are broken by source ID. Sizes use source FLAECHE square metres, not degrees.
+Polygon records are not merged: disconnected/truncated-key groups are not assumed
+to be a single accessible park. Fragmented sites may therefore be underestimated.
+The entrance layer was audited (6,562 points), but unmatched keys, fragmented
+polygons and unresolved point-type semantics prevent a reliable entrance join.
 
-1. Find the nearest mapped point in each complete dataset using haversine distance
-   with mean Earth radius 6,371,000 m. Exact distance ties use source ID ordering.
-2. Category score = `100 * clamp(1 - distance / D, 0, 1)`.
-3. Contribution = category score × weight; total = sum of all four contributions.
-4. Total ≥80 gives grade 1; ≥60 grade 2; ≥40 grade 3; ≥20 grade 4; otherwise grade 5.
+## Validation, caching and failure policy
 
-Calculations and grade comparisons use unrounded values. Only the interface rounds
-distances/scores. Consequently displayed contributions can differ slightly from
-the displayed total when summed. The rules and version are centralized in
-`ScoringModel.java`; change the version whenever rules change. The controlled
-example (100, 50, 0, 100) produces Student score 70 / grade 2 and Senior score
-52.5 / grade 3. Both are tested. Identical real locations may receive the same
-integer grade under both profiles; selection changes weights, not measurements.
-The student rules are numerically unchanged from `student-draft-v1`; the new model
-version identifies the addition of the documented senior rules. Historical Sprint 1
-evidence retains its original model identifier. The profile descriptions are draft
-design rationales, not research findings or claims about individual preferences.
+The address must be covered by one of all 23 validated district polygons, including
+edges; holes are respected. A postcode/name alone never proves the location is in Vienna.
 
-## Validation and cache policy
+Complete snapshots are checksum-protected raw JSON envelopes, atomically saved,
+revalidated after restart and shared by concurrent requests. Refresh after 24 h;
+if refresh fails, explicitly labelled fallback may be used for less than 7 days.
+Exactly at 7 days it expires. Failed refresh retries back off 5 minutes. A failed
+disk write does not discard valid in-memory data. These are operational choices,
+not guarantees of observation freshness. Source featureCount reports eligible
+records after documented filters; raw snapshot hashes cover the complete response.
 
-Full layer downloads must have a recognized CRS, nonzero numeric total matching
-the returned count, unique feature IDs and valid geometry for **every** record.
-Required coordinates must be numeric, finite and in longitude/latitude bounds.
-One invalid coordinate rejects the layer; features are not silently dropped.
-Boundary validation additionally requires the unique district numbers 1–23 and
-valid Polygon/MultiPolygon geometry. JTS `covers` includes the city boundary;
-holes are respected. The address label/postcode alone never authorizes scoring.
+Each network request times out after 15 seconds (connection timeout 5 seconds).
+First assessment can require the address plus six source downloads. Missing
+boundary blocks all scoring. Missing any required domain layer, including either
+healthcare layer, withholds the overall score/grade and sensitivity. Available
+factors may be shown individually; no partial grade or weight redistribution.
+Addresses remain live, unpersisted lookups. Source states distinguish live,
+cached, stale fallback and unavailable data.
 
-Missing amenity names are a display limitation, not missing distance measurements:
-retain their valid coordinates, label them `Unnamed feature (source ID)` and
-disclose the count in the source details. The live transit snapshot had seven
-blank names on 17 September 2026. No substitute coordinates or scores are invented.
+Retain response and cache envelopes for reproducibility. The model identifier,
+measurements, source IDs and SHA-256 identify the calculation inputs. No historical
+replay endpoint is provided. Old `profiles-draft-v1` evidence remains historical
+and is not presented as validation of v3. V2 evidence also remains historical.
 
-Snapshots are loaded lazily, held in memory and saved as one atomic JSON envelope
-per layer containing retrieval time, raw GeoJSON and SHA-256. Disk snapshots are
-revalidated on process startup/first use; checksum failures are ignored. A complete
-new snapshot replaces the old one only after validation. Concurrent requests share
-one refresh per layer. Defaults: refresh after 24 h; on failure allow an explicitly
-identified fallback younger than 7 days; retry failed sources after 5 min. Exactly
-at the maximum age the snapshot is no longer usable. A failed disk write is logged;
-the validated in-memory snapshot remains usable for the running process.
+## Explicitly deferred from the research proposal
 
-The 24 h / 7 day policy is a provisional operational choice, not a source freshness
-guarantee. Each network call has a 15 s timeout and connection establishment has a
-5 s timeout. Address queries are live and are not persisted. Up to six sequential
-requests are needed on the first assessment. No source availability guarantee is
-assumed. Missing boundary or any mandatory amenity layer with no usable fallback
-means **no overall score or grade**. No silent zero distances, partial grades or
-weight renormalization are used.
+- **Noise:** official 2022 road/rail GeoPackages were located, but source coverage,
+  absent-polygon semantics and band censoring were not established. No quietness
+  score is invented. A validated Vienna extract and coverage audit are prerequisites.
+- **Walking routes and green entrances:** no verified pedestrian network or reliable
+  entrance-to-area join is loaded. Straight-line/boundary distances remain visible.
+- **Raster greenery/heat/air quality:** raw analytical coverage is not established.
+  Styled map pixels and a nearby monitoring station are not substitutes.
+- Housing affordability, safety, service quality, individual needs and subjective
+  wellbeing remain unmeasured. Suggestions still do not handle arbitrary typos or aliases.
 
-For repeatability retain the response (resolved coordinates, model, measurements,
-source IDs and hashes) and cache envelopes together. The API does not provide
-historical replay. Identical address coordinates, model and snapshot contents
-produce the same numerical result; live source refreshes may change it. The cache
-is operational, not a permanent archive. Do not equate a new retrieval hash with
-changed amenities: the raw response also contains a service timestamp.
-
-## Limits and remaining research
-
-- Straight-line point distances are not walking distance, route accessibility,
-  park entrance distance or an assessment of park size/quality.
-- Stops describe proximity, not routes, frequency, reliability or step-free access.
-- Pharmacies are locations; opening hours and night duty are excluded.
-- Only municipal libraries are included, not university libraries or all study spaces.
-- Source mistakes can remain despite format/completeness checks. There is no
-  independent real-world validation of every point or assurance that all amenities
-  are mapped. Regionally unusual but globally valid coordinates are retained;
-  review such cases before the final model.
-- Affordability, housing, safety, noise, air pollution and subjective preferences
-  are not measured. A nearby air-monitoring station is not an air-quality score.
-- Exact-address coverage and usability need broader testing. A failed Vienna-only
-  search cannot reliably distinguish a typo from an outside-Vienna address.
-
-No account, database, map, air-quality integration or profile beyond Student/Senior is included.
+These limits are part of the model definition, not a claim that the entire proposed
+five-domain quality-of-life model is complete.

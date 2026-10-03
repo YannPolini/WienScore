@@ -64,4 +64,54 @@ class AddressLookupTest {
         source.handler = q -> new WfsFixture.Response(200, WfsFixture.collection(1, WfsFixture.address(16, 200)), 0);
         assertEquals("LOOKUP_UNAVAILABLE", lookup.resolve("Hoher Markt 1").status());
     }
+
+    @Test void suggestionsSupportGermanTransliterationsAndPostcodes() {
+        source.handler = q -> new WfsFixture.Response(200, WfsFixture.collection(1,
+                WfsFixture.point("ADRESSENOGD.123", "{\"NAME\":\"Marchfeldstraße 10\",\"PLZ\":\"1200\"}", 16.37, 48.21)), 0);
+        var result = lookup.suggest("marchfeldstrasse 10, 1200 Vienna");
+        assertEquals("SUGGESTIONS", result.status());
+        assertEquals("Marchfeldstraße 10, 1200 Wien", result.matches().getFirst().label());
+        String filter = source.requests.getFirst().get("CQL_FILTER");
+        assertTrue(filter.contains("NAME ILIKE 'marchfeldstraße 10%'"));
+        assertTrue(filter.contains("NAME ILIKE 'marchfeldstrasse 10%'"));
+        assertTrue(filter.endsWith("AND PLZ = '1200'"));
+        assertEquals("8", source.requests.getFirst().get("maxFeatures"));
+    }
+
+    @Test void suggestionsRejectWildcardInjectionAndSkipShortQueries() {
+        assertTrue(lookup.suggest("Ho").matches().isEmpty());
+        for (String input : new String[]{"Ho%", "Ho_", "Ho\\", "Ho\n", "x".repeat(161), "Hoher Markt 1 Top 2"})
+            assertThrows(IllegalArgumentException.class, () -> lookup.suggest(input));
+        assertTrue(source.requests.isEmpty());
+        lookup.suggest("O'Brien");
+        assertTrue(source.requests.getFirst().get("CQL_FILTER").contains("o''brien%"));
+    }
+
+    @Test void suggestionsFailClosedOnUnrelatedIncompleteOrInvalidResults() {
+        assertEquals("LOOKUP_UNAVAILABLE", lookup.suggest("Another street").status());
+        source.handler = q -> new WfsFixture.Response(200, WfsFixture.collection(2, WfsFixture.address(16, 48)), 0);
+        assertEquals("LOOKUP_UNAVAILABLE", lookup.suggest("Hoher").status());
+        source.handler = q -> new WfsFixture.Response(200, WfsFixture.collection(1, WfsFixture.address(16, 200)), 0);
+        assertEquals("LOOKUP_UNAVAILABLE", lookup.suggest("Hoher").status());
+        source.handler = q -> new WfsFixture.Response(503, "down", 0);
+        assertEquals("LOOKUP_UNAVAILABLE", lookup.suggest("Hoher").status());
+        source.handler = q -> new WfsFixture.Response(200, WfsFixture.collection(0), 0);
+        assertEquals("SUGGESTIONS", lookup.suggest("Hoher").status());
+        assertTrue(lookup.suggest("Hoher").matches().isEmpty());
+    }
+
+    @Test void selectedIdResolvesAnnotatedNameAndRejectsSubstitution() {
+        source.handler = q -> new WfsFixture.Response(200, WfsFixture.collection(1,
+                WfsFixture.point("ADRESSENOGD.123", "{\"NAME\":\"Karlsplatz 13 Technische Universität Wien\",\"PLZ\":\"1040\"}", 16.37, 48.21)), 0);
+        var suggestion = lookup.suggest("Karlsplatz 13").matches().getFirst();
+        var resolved = lookup.resolveId(suggestion.id());
+        assertEquals("RESOLVED", resolved.status());
+        assertEquals(suggestion, resolved.matches().getFirst());
+        assertEquals("ADRESSENOGD.123", source.requests.getLast().get("featureID"));
+        assertFalse(source.requests.getLast().containsKey("CQL_FILTER"));
+        assertEquals("LOOKUP_UNAVAILABLE", lookup.resolveId("ADRESSENOGD.456").status());
+        assertThrows(IllegalArgumentException.class, () -> lookup.resolveId("OTHER.123"));
+        source.handler = q -> new WfsFixture.Response(200, WfsFixture.collection(0), 0);
+        assertEquals("NO_MATCH", lookup.resolveId("ADRESSENOGD.123").status());
+    }
 }

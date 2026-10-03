@@ -16,11 +16,13 @@ describe('App', () => {
   afterEach(() => TestBed.inject(HttpTestingController).verify());
 
   const success: Assessment = {
-    status: 'OK', message: 'Draft student estimate.', profile: 'Student', profileDescription: 'Draft study and transport priorities.', modelVersion: 'profiles-draft-v1',
+    status: 'OK', message: 'Draft student estimate.', profile: 'Student', profileDescription: 'Draft study and transport priorities.', modelVersion: 'neighbourhood-proximity-v3',
     location: { id: 'address.1', label: 'Hoher Markt 1, 1010 Wien', longitude: 16.373, latitude: 48.211 },
     candidates: [], addressRetrievedAt: '2026-09-17T07:00:00Z', score: 78, grade: 2,
-    factors: [{ category: 'Parks', nearestId: 'park.1', nearestName: 'Test Park', distanceMetres: 250,
-      distanceLimitMetres: 1000, score: 75, weight: .25, contribution: 18.75 }],
+    sensitivity: { stricterScore: 70, stricterGrade: 2, looserScore: 82, looserGrade: 1 },
+    factors: [{ category: 'Green space', score: 75, weight: .25, contribution: 18.75, aggregation: 'MEAN', method: 'Mean of four measurements.',
+      measures: [{ label: 'Any public green space', nearestId: 'park.1', nearestName: 'Test Park', distanceMetres: 375,
+        targetMetres: 250, distanceLimitMetres: 750, score: 60, withinTarget: false, state: 'MEASURED' }] }],
     sources: [{ category: 'Parks', layer: 'PARKINFOOGD', url: 'https://data.wien.gv.at',
       attribution: 'Stadt Wien', license: 'CC BY 4.0', retrievedAt: '2026-09-17T07:00:00Z',
       sha256: 'abc', featureCount: 2, unnamedFeatures: 0, state: 'CACHED', message: 'Validated cache.', limitation: 'Points, not entrances.' }],
@@ -44,7 +46,7 @@ describe('App', () => {
     fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
     await fixture.whenStable();
     expect(fixture.nativeElement.querySelector('button').disabled).toBe(true);
-    expect(fixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Resolving');
+    expect(fixture.nativeElement.querySelector('.calculation-status').textContent).toContain('Resolving');
     const request = TestBed.inject(HttpTestingController).expectOne('/api/assessments');
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual({ address: input.value, profile: 'STUDENT' });
@@ -80,7 +82,7 @@ describe('App', () => {
     await fixture.whenStable();
     expect(fixture.nativeElement.querySelector('.grade')).toBeNull();
     expect(fixture.nativeElement.textContent).toContain('No overall grade: unavailable data for Pharmacies');
-    const details: HTMLDetailsElement = fixture.nativeElement.querySelector('details');
+    const details: HTMLDetailsElement = fixture.nativeElement.querySelector('.source-details');
     expect(details.open).toBe(true);
     expect(details.textContent).toContain('Sep 17, 2026');
     expect(details.textContent).toContain('Older snapshot fallback');
@@ -116,10 +118,24 @@ describe('App', () => {
   it('explains zero contributions without claiming the amenity does not exist', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.componentInstance.result.set({ ...success,
-      factors: [{ ...success.factors[0], distanceMetres: 1500, score: 0, contribution: 0 }] });
+      factors: [{ ...success.factors[0], score: 0, contribution: 0,
+        measures: [{ ...success.factors[0].measures[0], distanceMetres: 1500, score: 0 }] }] });
     await fixture.whenStable();
-    expect(fixture.nativeElement.textContent).toContain('at or beyond the draft distance limit');
+    expect(fixture.nativeElement.textContent).toContain('Beyond the scoring cutoff');
     expect(fixture.nativeElement.textContent).toContain('does not mean the amenity is absent');
+  });
+
+  it('shows missing qualifying places without an invented distance and explains sensitivity', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.componentInstance.result.set({ ...success,
+      factors: [{ ...success.factors[0], measures: [{ ...success.factors[0].measures[0],
+        nearestId: null, nearestName: null, distanceMetres: null, score: 0, state: 'NO_QUALIFYING_FEATURE' }] }] });
+    await fixture.whenStable();
+    expect(fixture.nativeElement.textContent).toContain('No qualifying feature in the complete dataset');
+    expect(fixture.nativeElement.textContent).not.toContain('0 m ·');
+    expect(fixture.nativeElement.textContent).toContain('70.0–82.0 / 100');
+    expect(fixture.nativeElement.textContent).toContain('not a confidence interval');
+    expect(fixture.nativeElement.textContent).toContain('noise');
   });
 
   it('does not round a near-boundary score into a better grade', async () => {
@@ -202,5 +218,95 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toBe('WienScore');
+  });
+
+  it('debounces suggestions, cancels obsolete requests and selects by keyboard', async () => {
+    vi.useFakeTimers();
+    try {
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+      const app = fixture.componentInstance;
+      const http = TestBed.inject(HttpTestingController);
+      app.address = 'Kar'; app.addressChanged();
+      vi.advanceTimersByTime(200);
+      http.expectNone('/api/addresses/suggest');
+      app.address = 'Karlsplatz'; app.addressChanged();
+      vi.advanceTimersByTime(300);
+      const old = http.expectOne('/api/addresses/suggest');
+      app.address = 'Karlsplatz 13'; app.addressChanged();
+      expect(old.cancelled).toBe(true);
+      vi.advanceTimersByTime(300);
+      const request = http.expectOne('/api/addresses/suggest');
+      expect(request.request.body).toEqual({ address: 'Karlsplatz 13' });
+      const match = { ...success.location!, id: 'ADRESSENOGD.123', label: 'Karlsplatz 13 Technische Universität Wien, 1040 Wien' };
+      request.flush({ status: 'SUGGESTIONS', message: 'Choose an address.', matches: [match] });
+      fixture.detectChanges();
+      const input = fixture.nativeElement.querySelector('input');
+      expect(input.getAttribute('aria-expanded')).toBe('true');
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true }));
+      fixture.detectChanges();
+      expect(input.getAttribute('aria-activedescendant')).toBe('address-option-0');
+      const enter = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
+      input.dispatchEvent(enter);
+      expect(enter.defaultPrevented).toBe(true);
+      expect(app.address).toBe(match.label);
+      expect(app.suggestionsOpen()).toBe(false);
+      http.expectNone('/api/assessments');
+      app.search();
+      const assessment = http.expectOne('/api/assessments');
+      expect(assessment.request.body.addressId).toBe(match.id);
+      assessment.flush(success);
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('selects a suggestion by click and discards its ID after editing', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    app.suggestions.set([{ ...success.location!, id: 'ADRESSENOGD.123' }]);
+    app.suggestionsOpen.set(true);
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('[role="option"]').click();
+    expect(app.address).toBe(success.location!.label);
+    app.address = 'Hoher Markt 2'; app.addressChanged();
+    app.search();
+    const request = TestBed.inject(HttpTestingController).expectOne('/api/assessments');
+    expect(request.request.body.addressId).toBeUndefined();
+    request.flush(success);
+  });
+
+  it('dismisses with Escape and blur, including pending requests', () => {
+    vi.useFakeTimers();
+    try {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      fixture.detectChanges();
+      app.address = 'Hoher'; app.addressChanged();
+      vi.advanceTimersByTime(300);
+      const request = TestBed.inject(HttpTestingController).expectOne('/api/addresses/suggest');
+      fixture.nativeElement.querySelector('input').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(request.cancelled).toBe(true);
+      expect(app.suggestionsOpen()).toBe(false);
+      app.loadSuggestions();
+      fixture.nativeElement.querySelector('input').dispatchEvent(new Event('blur'));
+      vi.advanceTimersByTime(300);
+      TestBed.inject(HttpTestingController).expectNone('/api/addresses/suggest');
+    } finally { vi.useRealTimers(); }
+  });
+
+  it('shows empty and unavailable suggestions without blocking manual entry', () => {
+    vi.useFakeTimers();
+    try {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      app.address = 'Hoher'; app.addressChanged();
+      vi.advanceTimersByTime(300);
+      TestBed.inject(HttpTestingController).expectOne('/api/addresses/suggest')
+        .flush({ status: 'SUGGESTIONS', message: 'No suggestions.', matches: [] });
+      expect(app.suggestionMessage()).toBe('No suggestions.');
+      app.loadSuggestions(); vi.advanceTimersByTime(300);
+      TestBed.inject(HttpTestingController).expectOne('/api/addresses/suggest').error(new ProgressEvent('error'));
+      expect(app.suggestionMessage()).toContain('Suggestions unavailable');
+      expect(app.busy()).toBe(false);
+    } finally { vi.useRealTimers(); }
   });
 });

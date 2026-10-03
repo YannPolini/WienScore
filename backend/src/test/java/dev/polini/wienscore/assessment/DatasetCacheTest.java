@@ -62,14 +62,14 @@ class DatasetCacheTest {
 
     @ParameterizedTest @EnumSource(ScoringModel.Profile.class)
     void incompleteOrInvalidMandatoryDataWithNoCacheWithholdsTheGrade(ScoringModel.Profile profile) {
-        source.handler = q -> q.get("typeName").endsWith("PARKINFOOGD")
+        source.handler = q -> q.get("typeName").endsWith("OEFFGRUENFLOGD")
                 ? new WfsFixture.Response(200, WfsFixture.collection(7), 0)
                 : new WfsFixture.Response(200, WfsFixture.standard(q), 0);
         var result = new AssessmentService(new AddressLookup(wfs), cache).assess("Hoher Markt 1", profile);
         assertEquals("DATA_UNAVAILABLE", result.status());
         assertNull(result.grade());
         assertNull(result.score());
-        assertTrue(result.message().contains("Parks"));
+        assertTrue(result.message().contains("Public green space"));
         assertEquals(3, result.factors().size());
         assertEquals(profile.label, result.profile());
         assertEquals(ScoringModel.rules(profile).get(1).weight(), result.factors().getFirst().weight());
@@ -86,7 +86,7 @@ class DatasetCacheTest {
         var fallback = service.assess("Hoher Markt 1", profile);
         assertEquals(first.score(), fallback.score());
         assertTrue(fallback.sources().stream().allMatch(s -> s.state().equals("STALE_FALLBACK")));
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < first.sources().size(); i++) {
             assertEquals(first.sources().get(i).retrievedAt(), fallback.sources().get(i).retrievedAt());
             assertEquals(first.sources().get(i).sha256(), fallback.sources().get(i).sha256());
         }
@@ -109,7 +109,7 @@ class DatasetCacheTest {
 
     @Test void corruptCacheAndFailedSourceDoNotProduceASnapshot() throws Exception {
         cache.get(Dataset.PARKS);
-        Path file = directory.resolve("PARKINFOOGD.json");
+        Path file = directory.resolve("OEFFGRUENFLOGD.json");
         Files.writeString(file, Files.readString(file).replace("Near feature", "Changed name"));
         source.handler = q -> new WfsFixture.Response(503, "down", 0);
         assertNull(newCache().get(Dataset.PARKS).snapshot());
@@ -126,7 +126,7 @@ class DatasetCacheTest {
 
     @Test void unnamedPointsAreRetainedAndDisclosed() {
         var snapshot = cache.validate(Dataset.TRANSIT, wfs.parse(WfsFixture.collection(1,
-                WfsFixture.point("stop.1", "{\"BEZEICHNUNG\":\" \"}", 16, 48))), clock.instant());
+                WfsFixture.point("stop.1", "{\"HTXT\":\" \",\"LTYP\":2}", 16, 48))), clock.instant());
         assertEquals(1, snapshot.features().size());
         assertEquals(1, snapshot.unnamedFeatures());
         assertEquals("Unnamed feature (stop.1)", snapshot.features().getFirst().name());

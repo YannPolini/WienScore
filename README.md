@@ -2,13 +2,13 @@
 
 A Vienna address-to-grade prototype for the Innovation Lab 2 individual retake,
 project **LQ_Web**. Choose a **student** or **senior** profile using real
-Vienna open data: parks, Wiener Linien stops, pharmacies and municipal libraries.
+Vienna open data: public green areas, transport modes, general practitioners, pharmacies and municipal libraries.
 
 Try **Hoher Markt 1, 1010 Wien**. The app shows the resolved location, a grade from
 1 (best) to 5, nearest places/distances, contributions and source snapshots.
-The weights and thresholds are provisional assumptions, not validated research
-or an official quality-of-life rating. Both profiles use the same measured distances
-with different documented weights. Exact street spelling is still required.
+Planning benchmarks inform green-space and transport targets; weights, decline and
+other thresholds are design choices, not a validated quality-of-life rating. Both profiles use the same measured distances
+with different documented weights. Address suggestions support official labels and common German spelling variants.
 
 ## Quick start with Docker
 
@@ -27,7 +27,7 @@ docker compose up --build -d
 
 Open **http://localhost:8081** and calculate `Hoher Markt 1, 1010 Wien`.
 Startup normally takes a few seconds after the image is built. The first
-calculation loads five layers and can take up to about 90 seconds on timeouts.
+calculation loads six layers and can take up to about 105 seconds on timeouts.
 Check `http://localhost:8081/actuator/health` for `{"status":"UP"}`. Health means
 that the app started; it does not guarantee the external datasets are available.
 
@@ -114,25 +114,33 @@ See [acceptance evidence](docs/ACCEPTANCE.md) for actual results and limits.
 - [Captured per-dataset license/update metadata](docs/source-metadata.json)
 - [API contract and screen behavior](docs/API.md)
 - [Implementation/verification record](docs/ACCEPTANCE.md)
-- [Research, contrasting locations and sensitivity checks](docs/VALIDATION.md)
+- [Current scoring-fix verification](docs/MODEL_V3_VALIDATION.md)
+- [Historical v2 verification](docs/MODEL_V2_VALIDATION.md)
+- [Historical v1 validation](docs/VALIDATION.md)
 - [Export and handover instructions](docs/HANDOVER.md)
 
-Model rules live in `ScoringModel.java`: distance limits 1000/800/1000/2000 m,
-student weights 25/40/10/25%, senior weights 35/25/35/5%, linear distance scores and grade cutoffs
-80/60/40/20. Current model: `profiles-draft-v1`. Change the model version when changing the rules. No weights are
-silently renormalized. Grades require all four categories and a verified location
-inside Vienna's district polygons. Missing names are disclosed; missing or invalid
-coordinates invalidate a snapshot.
+Current model: `neighbourhood-proximity-v3`. Green space uses four size/distance
+benchmarks; transport takes the better bus/tram or rail proximity score; healthcare
+combines general practitioners and pharmacies. Scores decrease continuously from 100 at zero distance to 80 at each
+benchmark, then to zero at three times that distance. Benchmark attainment is shown separately. Fixed profile weights
+combine four domains; all required data and a verified Vienna address are mandatory.
+The breakdown shows measurements, assumptions and a 2×/4× cutoff sensitivity check.
+Noise, walking routes and verified park entrances remain outside this version.
+See the model documentation for exact formulas, sources and the remaining data gates.
 
-Address lookup is deliberately exact: street and house number, optionally postcode
-and Wien or Vienna. Leave out apartment/Top/Tür/Stiege numbers; explicit markers
-produce helpful feedback, not a guessed building. For example, use
-`Marchfeldstraße 10, 1200 Wien`, including the correct street spelling.
-No fuzzy matching or autocomplete is implemented. No-match, ambiguity,
-invalid input, out-of-boundary coordinates and unusable data give explicit outcomes.
-Some real buildings have annotated labels in the source and are unsupported:
-`Karlsplatz 13, 1040 Wien` is one observed example. See the validation report
-for successful examples and retained no-match cases.
+Start typing a street and house number to see up to eight official Vienna address
+suggestions. Select with a click or Arrow keys and Enter; Escape closes the list.
+Suggestions start after three characters and a short typing pause. They support
+case-insensitive prefixes, ss/ß and ae/ä, oe/ö, ue/ü variants, and an optional
+postcode and Wien/Vienna suffix. Add a house number to narrow broad searches.
+Selected addresses are re-fetched by official feature ID on the server; client
+coordinates are never trusted. Annotated names such as Karlsplatz 13 Technische
+Universität Wien can therefore be selected and assessed. Editing the address
+clears the selected ID. No general typo correction or street aliases are promised.
+Manual entry without selecting a suggestion retains the exact-address fallback.
+Leave out apartment/Top/Tür/Stiege numbers. Source outages show a message, and
+manual entry stays available. Suggestions require live access to Vienna's service.
+
 The UI never silently picks an ambiguous result or keeps a result for edited input.
 The chosen profile is sent with each request; controls are disabled during the
 calculation. A request that stalls for two minutes ends with a retry message.

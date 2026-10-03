@@ -191,3 +191,54 @@ source build and loadable-image empty-cache startup here; second-machine accepta
 remains open. Formal review and actual effort remain blank. Submission preparation
 still needs source access/history, remaining diary/estimation fields, slides,
 user-recorded video, final combined ZIP size and upload verification. No remote push.
+
+
+## Address suggestions and UI simplification — 23 September 2026
+
+The working tree adds live official-address suggestions after three characters
+and a 300 ms typing pause. Up to eight results support mouse selection, Arrow
+keys/Enter, Escape and dismissal on blur. New input cancels the previous request
+and clears any selected ID. Manual exact entry remains available. Selected IDs
+are re-fetched server-side; source geometry and the Vienna boundary still apply.
+The scoring model, datasets and weights have not changed.
+
+The Docker build passed 50 backend and 18 frontend tests. New checks cover German
+transliterations/postcodes, query escaping and rejected wildcards, incomplete or
+unrelated source responses, annotated labels, selected-ID substitution, boundary
+checking, debounce/cancellation, keyboard and mouse selection, ID invalidation,
+empty results and unavailable suggestions. Git whitespace checks passed.
+
+Live checks: Karlsplatz 13 returned the official annotated university address;
+keyboard selection and calculation succeeded (Student 80.93/100, grade 1).
+`marchfeldstrasse 10, 1200 Wien` returned Marchfeldstraße 10, and
+`Huettelbergstrasse 26` returned Hüttelbergstraße 26 and 26A. Mouse selection was
+checked at a 390 × 844 viewport. Desktop and narrow dropdown layouts were inspected.
+This is not an actual touch-device or screen-reader check. Suggestions require
+live Vienna data; arbitrary typos/aliases and missing source records remain limits.
+Historical September 17 exact-lookup failures remain dated evidence; the new
+selection workflow addresses the annotated Karlsplatz example. Existing exported
+handover files predate these changes and require a new export for final delivery.
+
+
+## 23 September 2026 — neighbourhood proximity model v2
+
+Implemented the separately specified four-domain `neighbourhood-proximity-v2`:
+public green polygon sizes/boundaries, mode-aware transport, GP-plus-pharmacy
+healthcare, municipal libraries, target plateaus, fixed profiles and cutoff sensitivity.
+Research sources and remaining noise/routing/entrance gates are recorded in
+[SOURCES_AND_MODEL.md](SOURCES_AND_MODEL.md). This does not complete the conditional
+five-domain proposal or validate personal quality of life.
+
+Final Docker build: 57 backend and 19 frontend tests passed. Live smoke checks,
+eight addresses × two profiles, sensitivity evidence, and desktop/narrow-screen
+browser checks are recorded in [MODEL_V2_VALIDATION.md](MODEL_V2_VALIDATION.md).
+No commit, push or new handover image export was performed.
+
+
+## 23 September 2026 — ceiling-effect correction (v3)
+
+The reported all-100 results were traced to v2's full-credit plateau. V3 separates
+benchmark attainment from continuous scoring, keeping source measurements,
+benchmarks and weights unchanged. Eight addresses × both profiles were compared
+with exactly the same source hashes and distances; all sixteen scores are below
+100. See [v3 verification](MODEL_V3_VALIDATION.md) for results and regression coverage.

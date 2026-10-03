@@ -27,7 +27,12 @@ class DatasetCache {
     private final Duration retryAfter;
     private final Map<Dataset, Entry> entries = new EnumMap<>(Dataset.class);
 
-    record Feature(String id, String name, Geo.Location point, Geometry polygon) {}
+    record Feature(String id, String name, Geo.Location point, Geometry polygon, double areaSquareMetres, int transportType) {
+        Feature(String id, String name, Geo.Location point, Geometry polygon) { this(id, name, point, polygon, 0, 0); }
+        double distanceFrom(Geo.Location location) {
+            return point == null ? polygon.distance(Geo.metricPoint(location)) : Geo.distanceMetres(location, point);
+        }
+    }
     record Snapshot(List<Feature> features, Instant retrievedAt, String sha256, int unnamedFeatures) {}
     record View(Snapshot snapshot, String state, String message) {}
     record Stored(String retrievedAt, String sha256, String geoJson) {}
@@ -100,22 +105,41 @@ class DatasetCache {
         for (var node : response.features()) {
             String id = ViennaWfs.requiredText(node, "id");
             if (!ids.add(id)) throw new IllegalArgumentException("Duplicate feature ID");
+            if (dataset == Dataset.DOCTORS) {
+                String specialty = ViennaWfs.requiredText(node.path("properties"), "FACH").strip();
+                // Exact matches deliberately exclude Allgemeine Chirurgie (general surgery).
+                if (!Set.of("Allgemeinmedizin", "Allgemein- und Familienmedizin").contains(specialty)) continue;
+            }
             var nameNode = node.path("properties").path(dataset.nameField);
             String name = nameNode.isString() ? nameNode.asText().strip() : "";
-            if (name.isBlank()) {
+            boolean unnamedFeature = name.isBlank();
+            if (unnamedFeature) {
                 name = "Unnamed feature (" + id + ")";
-                unnamed++;
             }
             if (dataset == Dataset.BOUNDARY) {
                 var district = node.path("properties").path("BEZNR");
                 if (!district.isIntegralNumber() || district.asInt() < 1 || district.asInt() > 23
                         || !districts.add(district.asInt())) throw new IllegalArgumentException("Invalid district set");
                 features.add(new Feature(id, name, null, Geo.polygonGeometry(node.path("geometry"))));
+            } else if (dataset == Dataset.PARKS) {
+                var area = node.path("properties").path("FLAECHE");
+                if (!area.isNumber() || !Double.isFinite(area.asDouble()) || area.asDouble() <= 0)
+                    throw new IllegalArgumentException("Missing or invalid green-space area");
+                features.add(new Feature(id, name, null, Geo.metricGeometry(Geo.polygonGeometry(node.path("geometry"))), area.asDouble(), 0));
+            } else if (dataset == Dataset.TRANSIT) {
+                var type = node.path("properties").path("LTYP");
+                if (!type.isIntegralNumber() || !Set.of(1, 2, 3, 4, 5, 6, 9, 10, 11, 12, 13).contains(type.asInt()))
+                    throw new IllegalArgumentException("Unknown transport type");
+                var point = Geo.point(node);
+                if (type.asInt() > 6) continue;
+                features.add(new Feature(id, name, point, null, 0, type.asInt()));
             } else {
                 features.add(new Feature(id, name, Geo.point(node), null));
             }
+            if (unnamedFeature) unnamed++;
         }
         if (dataset == Dataset.BOUNDARY && districts.size() != 23) throw new IllegalArgumentException("Not all 23 districts present");
+        if (features.isEmpty()) throw new IllegalArgumentException("No eligible features in dataset");
         features.sort(Comparator.comparing(Feature::id));
         return new Snapshot(List.copyOf(features), retrievedAt, sha256(response.raw()), unnamed);
     }

@@ -30,10 +30,17 @@ class ViennaWfs {
     }
 
     Collection fetch(String layer, int limit, String filter) {
+        return fetch(layer, limit, filter, null);
+    }
+
+    Collection fetchById(String id) { return fetch("ADRESSENOGD", 1, null, id); }
+
+    private Collection fetch(String layer, int limit, String filter, String id) {
         String url = endpoint + "?service=WFS&version=1.1.0&request=GetFeature"
                 + "&outputFormat=application/json&srsName=EPSG:4326&typeName=ogdwien:"
                 + layer + "&maxFeatures=" + limit;
         if (filter != null) url += "&CQL_FILTER=" + URLEncoder.encode(filter, StandardCharsets.UTF_8);
+        if (id != null) url += "&featureID=" + URLEncoder.encode(id, StandardCharsets.UTF_8);
         try {
             var request = HttpRequest.newBuilder(URI.create(url)).timeout(timeout)
                     .header("Accept", "application/json").GET().build();

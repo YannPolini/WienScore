@@ -1,45 +1,63 @@
 <main>
-  <p class="eyebrow">Vienna · Working prototype</p>
+  <p class="eyebrow">Vienna</p>
   <h1>WienScore</h1>
-  <p>How close are everyday amenities? Enter an address to see a draft grade and the places behind it.</p>
+  <p>Everyday places, closer to home.</p>
   <form (ngSubmit)="search()">
+    <div class="form-fields">
+    <div>
     <label for="profile">Profile</label>
-    <select id="profile" name="profile" [(ngModel)]="profile" (ngModelChange)="clearResult()" [disabled]="busy()" aria-describedby="profile-help">
+    <select id="profile" name="profile" [(ngModel)]="profile" (ngModelChange)="clearResult()" [disabled]="busy()">
       <option value="STUDENT">Student</option>
       <option value="SENIOR">Senior</option>
     </select>
-    <p id="profile-help">The profile changes how much each amenity counts. These are draft priorities, not assumptions about every person in a group.</p>
-    <label for="address">Vienna street and house number</label>
-    <p id="address-help">Use the exact street spelling, including ß and umlauts. You can add a postcode and Wien or Vienna. Leave out apartment or Top numbers.</p>
+    </div>
+    <div>
+    <label for="address">Vienna address</label>
     <div class="input-row">
-      <input id="address" name="address" [(ngModel)]="address" (ngModelChange)="clearResult()" maxlength="160"
-        placeholder="Hoher Markt 1, 1010 Wien" aria-describedby="address-help" [disabled]="busy()" />
+      <div class="address-combobox">
+      <input id="address" name="address" [(ngModel)]="address" (ngModelChange)="addressChanged()" maxlength="160"
+        placeholder="Hoher Markt 1, 1010 Wien" aria-describedby="address-help" [disabled]="busy()"
+        role="combobox" aria-autocomplete="list" autocomplete="off" aria-controls="address-suggestions"
+        [attr.aria-expanded]="suggestionsOpen() && suggestions().length > 0"
+        [attr.aria-activedescendant]="activeSuggestion() >= 0 ? 'address-option-' + activeSuggestion() : null"
+        (keydown)="addressKeydown($event)" (focus)="loadSuggestions()" (blur)="dismissSuggestions()" />
+      @if (suggestionsOpen() && suggestions().length) {
+        <ul id="address-suggestions" role="listbox" aria-label="Address suggestions">
+          @for (match of suggestions(); track match.id; let i = $index) {
+            <li role="option" [id]="'address-option-' + i" [attr.aria-selected]="activeSuggestion() === i"
+              [class.active]="activeSuggestion() === i" (mousedown)="$event.preventDefault()"
+              (click)="chooseAddress(match)">{{ match.label }}</li>
+          }
+        </ul>
+      }
+      </div>
       <button type="submit" [disabled]="busy()">{{ busy() ? 'Calculating…' : 'Calculate grade' }}</button>
     </div>
+    </div>
+    </div>
+    <p id="address-help" class="small">Type a street and house number, then choose an address. Leave out apartment numbers.</p>
+    <p class="small suggestion-status" role="status" aria-live="polite">{{ suggesting() ? 'Finding addresses…' : suggestionMessage() }}</p>
   </form>
-  <p class="notice">Provisional weights and thresholds. This is an amenity-access estimate, not an official rating or a complete measure of quality of life.</p>
-  @if (busy()) { <p role="status">Resolving your address and checking Vienna open data. The first calculation can take up to 90 seconds.</p> }
+  <p class="notice">Neighbourhood proximity · Green space, transport, healthcare and libraries.</p>
+  @if (busy()) { <p class="calculation-status" role="status">Resolving your address… The first result may take up to 105 seconds.</p> }
   @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
   <div aria-live="polite" aria-atomic="true" class="result-announcement">@if (result(); as result) { {{ result.grade !== null ? result.profile + ' grade ' + result.grade + ' of 5. ' : '' }}{{ result.message }} }</div>
   @if (result(); as result) {
     <section>
-      <h2>{{ result.grade !== null ? 'Your draft result' : 'No grade available' }}</h2>
-      <p>{{ result.message }}</p>
-      <p><strong>{{ result.profile }} profile.</strong> {{ result.profileDescription }}</p>
+      <h2>{{ result.grade !== null ? 'Proximity grade' : 'No grade available' }}</h2>
+      @if (result.grade === null) { <p>{{ result.message }}</p> }
       @for (source of result.sources; track source.layer) {
         @if (source.state === 'STALE_FALLBACK') {
           <p class="warning">{{ source.category }} uses an older snapshot from {{ source.retrievedAt | date:'medium':'UTC' }} UTC because refresh failed. See data details below.</p>
         }
       }
       @if (result.location; as location) {
-        <h3>Resolved location</h3>
-        <p><strong>{{ location.label }}</strong><br />{{ location.latitude }}, {{ location.longitude }} (latitude, longitude)</p>
-        <p class="small">Address source: Stadt Wien, ADRESSENOGD. Retrieved {{ result.addressRetrievedAt | date:'medium':'UTC' }} UTC.</p>
+        <p class="location">{{ location.label }}</p>
       }
       @if (result.grade !== null) {
         <div class="summary">
           <div class="grade" aria-label="Grade">{{ result.grade }}<span>of 5 · 1 is best</span></div>
-          <div><strong>{{ result.score | number:'1.2-2' }} / 100</strong><br />{{ result.profile }} · {{ result.modelVersion }}</div>
+          <div>Proximity score<br /><strong>{{ result.score | number:'1.2-2' }} / 100</strong><br />{{ result.profile }} profile</div>
         </div>
       }
       @if (result.candidates.length) {
@@ -50,29 +68,49 @@
     </section>
     @if (result.factors.length) {
       <section>
-        <h2>What contributes to this result?</h2>
-        <p>Distances are straight-line estimates to mapped points, not walking routes. Each factor falls linearly from 100 at zero distance to 0 at its distance limit.</p>
+        <h2>Your neighbourhood</h2>
+        <p>Straight-line distances, not walking routes.</p>
         <div class="factors">
           @for (factor of result.factors; track factor.category) {
             <article>
               <h3>{{ factor.category }}</h3>
-              <p><strong>{{ factor.distanceMetres | number:'1.0-0' }} m</strong> · {{ factor.nearestName }}</p>
-              <dl>
-                <div><dt>Factor score</dt><dd>{{ factor.score | number:'1.2-2' }} / 100</dd></div>
-                <div><dt>Weight</dt><dd>{{ factor.weight * 100 | number:'1.0-0' }}%</dd></div>
-                <div><dt>Contribution</dt><dd>{{ factor.contribution | number:'1.2-2' }} points</dd></div>
-                <div><dt>Distance limit</dt><dd>{{ factor.distanceLimitMetres }} m</dd></div>
-              </dl>
-              @if (factor.distanceMetres >= factor.distanceLimitMetres) {
-                <p class="small">The nearest mapped place is at or beyond the draft distance limit, so this factor contributes no points. This does not mean the amenity is absent.</p>
-              } @else {
-                <p class="small">This factor contributes {{ factor.contribution | number:'1.2-2' }} of its maximum {{ factor.weight * 100 | number:'1.0-0' }} points for the {{ result.profile }} profile. Closer mapped places earn more points.</p>
+              <p><strong>{{ factor.score | number:'1.1-1' }} / 100</strong></p>
+              <details class="factor-details"><summary>Places & score</summary>
+              @for (measure of factor.measures; track measure.label) {
+                <div class="measurement">
+                  <strong>{{ measure.label }}</strong>
+                  @if (measure.distanceMetres !== null) {
+                    <p>{{ measure.distanceMetres | number:'1.0-0' }} m · {{ measure.nearestName }}</p>
+                  } @else {
+                    <p>No qualifying feature in the complete dataset.</p>
+                  }
+                  @if (measure.distanceMetres !== null && measure.score === 0) {
+                    <p class="small">Beyond the scoring cutoff; this does not mean the amenity is absent.</p>
+                  }
+                  <p class="small">{{ measure.score | number:'1.1-1' }} / 100 · Benchmark: {{ measure.targetMetres }} m ({{ measure.withinTarget ? 'met' : 'not met' }}); zero at {{ measure.distanceLimitMetres }} m.</p>
+                </div>
               }
+              <p class="small">{{ factor.method }}</p>
+              <dl>
+                <div><dt>Weight</dt><dd>{{ factor.weight * 100 | number:'1.0-2' }}%</dd></div>
+                <div><dt>Contribution</dt><dd>{{ factor.contribution | number:'1.2-2' }} points</dd></div>
+              </dl>
+              </details>
             </article>
           }
         </div>
         @if (result.grade !== null) {
+          <details class="method"><summary>How the grade works</summary>
+          <p><strong>{{ result.profile }} profile.</strong> {{ result.profileDescription }}</p>
+          <p class="small">Each measurement falls continuously from 100 at zero distance to 80 at its benchmark, then to zero at three times that distance. Meeting a benchmark does not mean a perfect score. The 80-point reference is a design choice for comparing proximity, not a measured effect on wellbeing. Green-space and healthcare measurements are averaged; transport uses the better bus/tram or rail score. Profile weights combine the factors.</p>
           <p class="small">The weighted contributions add up to the overall score before rounding. Grade cutoffs: 80 → 1, 60 → 2, 40 → 3, 20 → 4, below 20 → 5. Grades use unrounded values; displayed numbers may differ slightly when added.</p>
+          <p class="small">Green-space targets follow <a href="https://www.wien.gv.at/spezial/wien-plan/stadtentwicklung-steuern-und-gestalten/grun-und-freiraum/" target="_blank" rel="noopener">Vienna’s planning benchmarks</a>. The 500 m bus/tram and 1,000 m rail proxies are informed by <a href="https://unhabitat.org/sites/default/files/2020/11/metadata_on_sdg_indicator_11.2.1_2020_1.pdf" target="_blank" rel="noopener">UN guidance</a>, which uses walking routes; this app uses straight-line distance. Healthcare and library targets, weights, decline and grade cutoffs are design choices.</p>
+          @if (result.sensitivity; as sensitivity) {
+            <p class="small">Cutoff sensitivity: {{ sensitivity.stricterScore | number:'1.1-1' }}–{{ sensitivity.looserScore | number:'1.1-1' }} / 100 (grades {{ sensitivity.stricterGrade }}–{{ sensitivity.looserGrade }}) if scores reach zero at 2× or 4× the target instead of 3×. This is a scenario comparison, not a confidence interval.</p>
+          }
+          <p class="small">Not measured: noise, walking routes, service quality, housing costs, safety, air quality or heat. No overall quality-of-life claim.</p>
+          <p class="small">Model: {{ result.modelVersion }}.</p>
+          </details>
         } @else {
           <p class="warning">These are available individual factors only. Missing data prevent an overall score or grade; the remaining weights are not increased.</p>
         }
@@ -80,19 +118,26 @@
     }
     @if (result.sources.length) {
       <section>
-        <h2>Data and limitations</h2>
-        <p>Snapshot times show when data were retrieved, not when each place was last updated. By default, cached data are refreshed after 24 hours; a failed refresh may use a validated snapshot up to 7 days old.</p>
+        <h2>Data sources</h2>
+        <p>Data refresh daily. If a refresh fails, snapshots up to 7 days old may be used.</p>
+        @if (result.location; as location) {
+          <details><summary>Address details</summary>
+            <p>{{ location.latitude }}, {{ location.longitude }} (latitude, longitude)</p>
+            <p class="small">Stadt Wien · ADRESSENOGD · Retrieved {{ result.addressRetrievedAt | date:'medium':'UTC' }} UTC.</p>
+          </details>
+        }
         @for (source of result.sources; track source.layer) {
-          <details [open]="source.state === 'UNAVAILABLE' || source.state === 'STALE_FALLBACK'">
+          <details class="source-details" [open]="source.state === 'UNAVAILABLE' || source.state === 'STALE_FALLBACK'">
             <summary>{{ source.category }} · {{ source.state === 'UNAVAILABLE' ? 'Unavailable' : source.state === 'STALE_FALLBACK' ? 'Older snapshot fallback' : 'Snapshot available' }}</summary>
             <p>{{ source.message }}</p>
             @if (source.retrievedAt) {
-              <p>{{ source.featureCount }} records · Retrieved {{ source.retrievedAt | date:'medium':'UTC' }} UTC.</p>
+              <p>{{ source.featureCount }} eligible records · Retrieved {{ source.retrievedAt | date:'medium':'UTC' }} UTC.</p>
             }
             @if (source.unnamedFeatures) {
               <p>{{ source.unnamedFeatures }} records have no name; their coordinates are retained and their source IDs identify them.</p>
             }
             <p>{{ source.limitation }}</p>
+            <p class="small">Retrieval times do not indicate when places were last updated.</p>
             <p><a [href]="source.url" target="_blank" rel="noopener">{{ source.layer }} source data</a> · {{ source.license }}</p>
             @if (source.sha256) { <p class="small hash">Snapshot SHA-256: {{ source.sha256 }}</p> }
           </details>
@@ -101,7 +146,6 @@
     }
   }
   <footer>
-    <p>Datenquelle: Stadt Wien – <a href="https://data.wien.gv.at">data.wien.gv.at</a>.<br />
-      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="https://digitales.wien.gv.at/ogd-nutzungsbedingungen/">Data terms and attribution</a> · WienScore calculates distances and provisional profile scores from these data.</p>
+    <p>Data: <a href="https://data.wien.gv.at">Stadt Wien</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · <a href="https://digitales.wien.gv.at/ogd-nutzungsbedingungen/">Attribution</a><br />Distances and scores calculated by WienScore.</p>
   </footer>
 </main>
