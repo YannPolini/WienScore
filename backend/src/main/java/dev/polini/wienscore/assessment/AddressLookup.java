@@ -125,7 +125,7 @@ class AddressLookup {
             if (response.total() == 0) return new Result("NO_MATCH",
                     "No exact address found in Vienna. Check the official street spelling (including ß and umlauts), house number and postcode. Leave out apartment or Top numbers. Spelling variants and addresses outside Vienna may not be found.", matches, Instant.now());
             if (response.total() > 1) return new Result("AMBIGUOUS",
-                    "Several addresses match. Add or correct the postcode and house number; no location was selected. Showing up to 10 matches.", matches, Instant.now());
+                    "Several addresses match. Add or correct the postcode and house number. No location was selected. Showing up to 10 matches.", matches, Instant.now());
             if (matches.size() != 1) throw new IllegalArgumentException("Incomplete address response");
             return new Result("RESOLVED", "Address found.", matches, Instant.now());
         } catch (RuntimeException ex) {

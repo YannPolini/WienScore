@@ -85,9 +85,9 @@
                     <p>No qualifying feature in the complete dataset.</p>
                   }
                   @if (measure.distanceMetres !== null && measure.score === 0) {
-                    <p class="small">Beyond the scoring cutoff; this does not mean the amenity is absent.</p>
+                    <p class="small">Beyond the scoring cutoff. A score of zero does not mean the amenity is absent.</p>
                   }
-                  <p class="small">{{ measure.score | number:'1.1-1' }} / 100 · Benchmark: {{ measure.targetMetres }} m ({{ measure.withinTarget ? 'met' : 'not met' }}); zero at {{ measure.distanceLimitMetres }} m.</p>
+                  <p class="small">{{ measure.score | number:'1.1-1' }} / 100 · Benchmark: {{ measure.targetMetres }} m ({{ measure.withinTarget ? 'met' : 'not met' }}). Zero at {{ measure.distanceLimitMetres }} m.</p>
                 </div>
               }
               <p class="small">{{ factor.method }}</p>
@@ -102,9 +102,9 @@
         @if (result.grade !== null) {
           <details class="method"><summary>How the grade works</summary>
           <p><strong>{{ result.profile }} profile.</strong> {{ result.profileDescription }}</p>
-          <p class="small">Each measurement falls continuously from 100 at zero distance to 80 at its benchmark, then to zero at three times that distance. Meeting a benchmark does not mean a perfect score. The 80-point reference is a design choice for comparing proximity, not a measured effect on wellbeing. Green-space and healthcare measurements are averaged; transport uses the better bus/tram or rail score. Profile weights combine the factors.</p>
-          <p class="small">The weighted contributions add up to the overall score before rounding. Grade cutoffs: 80 → 1, 60 → 2, 40 → 3, 20 → 4, below 20 → 5. Grades use unrounded values; displayed numbers may differ slightly when added.</p>
-          <p class="small">Green-space targets follow <a href="https://www.wien.gv.at/spezial/wien-plan/stadtentwicklung-steuern-und-gestalten/grun-und-freiraum/" target="_blank" rel="noopener">Vienna’s planning benchmarks</a>. The 500 m bus/tram and 1,000 m rail proxies are informed by <a href="https://unhabitat.org/sites/default/files/2020/11/metadata_on_sdg_indicator_11.2.1_2020_1.pdf" target="_blank" rel="noopener">UN guidance</a>, which uses walking routes; this app uses straight-line distance. Healthcare and library targets, weights, decline and grade cutoffs are design choices.</p>
+          <p class="small">Each measurement falls continuously from 100 at zero distance to 80 at its benchmark, then to zero at three times that distance. Meeting a benchmark does not mean a perfect score. The 80-point reference is a design choice for comparing proximity, not a measured effect on wellbeing. Green-space and healthcare measurements are averaged. Transport uses the better bus/tram or rail score. Profile weights combine the factors.</p>
+          <p class="small">The weighted contributions add up to the overall score before rounding. Grade cutoffs: 80 → 1, 60 → 2, 40 → 3, 20 → 4, below 20 → 5. Grades use unrounded values. Displayed numbers may differ slightly when added.</p>
+          <p class="small">Green-space targets follow <a href="https://www.wien.gv.at/spezial/wien-plan/stadtentwicklung-steuern-und-gestalten/grun-und-freiraum/" target="_blank" rel="noopener">Vienna’s planning benchmarks</a>. The 500 m bus/tram and 1,000 m rail proxies are informed by <a href="https://unhabitat.org/sites/default/files/2020/11/metadata_on_sdg_indicator_11.2.1_2020_1.pdf" target="_blank" rel="noopener">UN guidance</a>, which uses walking routes. This app uses straight-line distance. Healthcare and library targets, weights, decline and grade cutoffs are design choices.</p>
           @if (result.sensitivity; as sensitivity) {
             <p class="small">Cutoff sensitivity: {{ sensitivity.stricterScore | number:'1.1-1' }}–{{ sensitivity.looserScore | number:'1.1-1' }} / 100 (grades {{ sensitivity.stricterGrade }}–{{ sensitivity.looserGrade }}) if scores reach zero at 2× or 4× the target instead of 3×. This is a scenario comparison, not a confidence interval.</p>
           }
@@ -112,7 +112,7 @@
           <p class="small">Model: {{ result.modelVersion }}.</p>
           </details>
         } @else {
-          <p class="warning">These are available individual factors only. Missing data prevent an overall score or grade; the remaining weights are not increased.</p>
+          <p class="warning">These are available individual factors only. Missing data prevent an overall score or grade. The remaining weights are not increased.</p>
         }
       </section>
     }
@@ -134,7 +134,7 @@
               <p>{{ source.featureCount }} eligible records · Retrieved {{ source.retrievedAt | date:'medium':'UTC' }} UTC.</p>
             }
             @if (source.unnamedFeatures) {
-              <p>{{ source.unnamedFeatures }} records have no name; their coordinates are retained and their source IDs identify them.</p>
+              <p>{{ source.unnamedFeatures }} records have no name. Their coordinates are retained and their source IDs identify them.</p>
             }
             <p>{{ source.limitation }}</p>
             <p class="small">Retrieval times do not indicate when places were last updated.</p>

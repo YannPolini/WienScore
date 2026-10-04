@@ -51,7 +51,7 @@ class AssessmentService {
                 measures.add(measure("Green space ≥ 1 ha", view.snapshot(), location.point(), 500, 10_000));
                 measures.add(measure("Green space ≥ 3 ha", view.snapshot(), location.point(), 1000, 30_000));
                 measures.add(measure("Green space ≥ 10 ha", view.snapshot(), location.point(), 1500, 100_000));
-                method = "Mean of four size-and-distance scores. Distances reach mapped boundaries, not entrances; one space may meet several size targets.";
+                method = "Mean of four size-and-distance scores. Distances reach mapped boundaries, not entrances. One space may meet several size targets.";
             } else if (rule.dataset() == Dataset.PHARMACIES) {
                 category = "Primary healthcare";
                 var doctors = cache.get(Dataset.DOCTORS);
@@ -65,10 +65,10 @@ class AssessmentService {
                         f -> Set.of(1, 2, 3, 6).contains(f.transportType())));
                 measures.add(measure("U-Bahn / regional rail", view.snapshot(), location.point(), 1000, 0,
                         f -> Set.of(4, 5).contains(f.transportType())));
-                method = "Better of the bus/tram and rail proximity scores. Straight-line proxies for UN walking-distance targets; no service-frequency assessment.";
+                method = "Better of the bus/tram and rail proximity scores. Straight-line proxies for UN walking-distance targets. No service-frequency assessment.";
             } else {
                 measures.add(measure(rule.dataset().label, view.snapshot(), location.point(), rule.targetMetres(), 0));
-                method = "Nearest municipal library; other libraries and study-space capacity are not measured.";
+                method = "Nearest municipal library. Other libraries and study-space capacity are not measured.";
             }
             String aggregation = rule.dataset() == Dataset.TRANSIT ? "MAX" : "MEAN";
             double categoryScore = aggregate(measures.stream().mapToDouble(Measure::score), aggregation);
@@ -76,7 +76,7 @@ class AssessmentService {
         }
         if (!missing.isEmpty()) return result(profile, "DATA_UNAVAILABLE", "No overall grade: unavailable data for " + String.join(", ", missing) + ". Available factors below are not a partial overall score.", location, List.of(), resolution.retrievedAt(), null, factors, sources);
         double score = factors.stream().mapToDouble(Factor::contribution).sum();
-        return result(profile, "OK", "Neighbourhood proximity estimate using straight-line distances. Grade 1 is best; 5 is worst. Noise and walking routes are not measured.", location, List.of(), resolution.retrievedAt(), score, factors, sources);
+        return result(profile, "OK", "Neighbourhood proximity estimate using straight-line distances. Grade 1 is best. 5 is worst. Noise and walking routes are not measured.", location, List.of(), resolution.retrievedAt(), score, factors, sources);
     }
 
     private Assessment result(ScoringModel.Profile profile, String status, String message, AddressLookup.Match location, List<AddressLookup.Match> candidates,

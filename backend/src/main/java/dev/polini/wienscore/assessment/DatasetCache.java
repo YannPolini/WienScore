@@ -84,9 +84,9 @@ class DatasetCache {
                 }
             }
             if (usable(entry.snapshot, clock.instant(), maxAge)) {
-                return new View(entry.snapshot, "STALE_FALLBACK", "Refresh failed; using an older validated snapshot (maximum age " + maxAge.toDays() + " days).");
+                return new View(entry.snapshot, "STALE_FALLBACK", "Refresh failed. Using an older validated snapshot (maximum age " + maxAge.toDays() + " days).");
             }
-            return new View(null, "UNAVAILABLE", "No usable complete snapshot. The source may be unavailable, incomplete or invalid; please try again later.");
+            return new View(null, "UNAVAILABLE", "No usable complete snapshot. The source may be unavailable, incomplete or invalid. Please try again later.");
         }
     }
 

@@ -8,7 +8,7 @@ final class ScoringModel {
     static final String VERSION = "neighbourhood-proximity-v3";
     enum Profile {
         STUDENT("Student", "Prioritises transport and local learning resources. Weights express preferences, not measured scientific effects."),
-        SENIOR("Senior", "Prioritises nearby green space and primary healthcare. Weights express preferences; mobility needs and care availability are not assessed.");
+        SENIOR("Senior", "Prioritises nearby green space and primary healthcare. Weights express preferences. Mobility needs and care availability are not assessed.");
 
         final String label;
         final String description;

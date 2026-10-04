@@ -80,7 +80,7 @@ The export includes startup instructions and file checksums.
 | 2 | 21–27 September | Profiles, explanations and error handling |
 | 3 | 28 September–4 October | Validation, fixes and handover |
 
-These are the planned weeks; some work was completed early. The project diary is
+These are the planned weeks. Some work was completed early. The project diary is
 submitted separately.
 
 ## Data and license
