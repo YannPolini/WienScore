@@ -90,7 +90,7 @@ docker compose -p wienscore-handover down
 
 Stopping preserves cached data. Addresses still require a live source lookup.
 No grade is returned for ambiguous locations or unusable mandatory datasets.
-The source ZIP includes README, API, sources/model and validation documentation.
+The source ZIP includes the application, tests and README with startup instructions.
 The model is a draft amenity-access estimate, not a validated quality-of-life rating.
 See `manifest.json` for image identity, revision, sizes and file SHA-256 values.
 Compare using `Get-FileHash -Algorithm SHA256 <filename>` before loading.
